@@ -71,7 +71,6 @@ def pstr_to_svg (code_string):
 def pstr_to_html (pgstring):
     """..."""
     pghtmlstring = ''
-    pghtmlstring = '<table><tr><td></td><td></td></tr><tr><td></td><td></td></tr></table>'
 
     tgroup_start = '('
     tgroup_end = ')'
@@ -138,7 +137,7 @@ def pstr_to_html (pgstring):
         # print '\ntstring:\n' + tstring + '\n'
 
     print 'OLD rowcount check: ' + str(rowcount)
-    rowcount = pstr_rowcount(pghtmlstring)
+    rowcount = pstr_rowcount(pgstring)
     print 'NEW rowcount check: ' + str(rowcount)
     rowheight = 60/rowcount
     pghtmlstring = pghtmlstring.replace("rowheight", str(rowheight))
@@ -155,7 +154,7 @@ def text_to_file (filename, content_string):
     """..."""    
     # text_to_file(page_output_dir + codestring + '.svg', pstr_to_svg(codestring))
     with open(filename, "w") as text_file:
-        text_file.write(svgfile)
+        text_file.write(content_string)
 
 def app_batch_svg ():
     """..."""
