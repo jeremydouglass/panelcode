@@ -1,0 +1,73 @@
+<?xml version="1.0" standalone="yes"?>
+<svg width="75" height="126" viewBox="0	0 75 126" xmlns="http://www.w3.org/2000/svg">
+
+  <foreignObject x="5" y="10" width="60" height="75">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+		<style>
+		table.page{
+			layout: fixed;
+		    border: 1px solid black;
+			width: 50px;
+			padding: 0px;
+            border-spacing: 0px 1px;
+		}
+		table.page > tr, table.page > tr > td {
+			border: 0px solid red;
+            border-collapse: collapse;
+			padding: 0px;
+            border-spacing: 0px;
+		}
+        table.row {
+			layout: fixed;
+            border: 0px solid black;
+            width: 100%;
+			padding: 0px;
+			border-spacing: 2px 1px;
+        }
+		table.row > tr > td {
+			height: 10px;
+			border: 1px solid black;
+            padding: 0px;
+		}
+		</style>
+	  <table class='page'><tr><td>
+		<table class='row'><tr>
+			<td></td>
+		</tr></table>
+
+		<table class='row'><tr>
+			<td></td>
+			<td></td>
+		</tr></table>
+
+		<table class='row'><tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr></table>
+
+		<table class='row'><tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr></table>
+
+		<table class='row'><tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr></table>
+	  </td></tr></table>
+    </body>
+  </foreignObject>
+
+  <foreignObject x="10" y="75" width="60" height="48">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+    <div style='font-size: 8pt'>1,2,3,4,5</div>
+    </body>
+  </foreignObject>
+
+</svg>

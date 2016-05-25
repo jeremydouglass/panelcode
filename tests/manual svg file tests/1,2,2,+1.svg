@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<svg width="75" height="126" viewBox="0	0 75 126" xmlns="http://www.w3.org/2000/svg">
+
+  <foreignObject x="5" y="10" width="60" height="75">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+		<style>
+		table, th, td {
+		   border: 1px solid black;
+		}
+		table {
+			width: 50px;
+			height: 65px;
+			padding: 3px;
+		}
+		</style>
+	  <table>
+	  	<tr><td colspan='2'></td></tr>
+	  	<tr><td></td><td></td></tr>
+	  	<tr><td rowspan='2'></td><td></td></tr>
+	  	<tr><td></td></tr>
+	  </table>
+    </body>
+  </foreignObject>
+
+  <foreignObject x="10" y="75" width="60" height="48">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+    <div style='font-size: 8pt'>1, 2, 2,+1</div>
+    </body>
+  </foreignObject>
+
+</svg>
