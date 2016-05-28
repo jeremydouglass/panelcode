@@ -13,6 +13,9 @@ def pstr_parse (filename):
     """..."""
     # return '...'
 
+
+### ANALYZERS
+
 def pstr_rowcount (pstr):
     """count the rows in a panelcode string"""
     rowcount = 0
@@ -67,6 +70,9 @@ def pstr_to_svg (code_string):
 #def pcode_to_svg (panelcode):
 #    """..."""
     # return '...'
+
+
+### RENDERERS
 
 def pstr_to_html (pstr):
     """render a panelcode string as HTML"""
@@ -148,6 +154,9 @@ def pstr_to_html (pstr):
 #    html_string = ''
 #    html_string = '<table><tr><td></td><td></td></tr><tr><td></td><td></td></tr></table>'
 #    return html_string
+
+
+### FILE OUTPUT
 
 def text_to_file (filename, content_string):
     """write text to a file"""    
