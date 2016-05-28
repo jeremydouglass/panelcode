@@ -57,5 +57,33 @@ class BasicTestSuite(unittest.TestCase):
     	panelcode.app_batch_svg(batchstring)
         assert True
 
+
+class CleanTestSuite(unittest.TestCase):
+    """Clean test cases."""
+
+    def test_pstr_clean(self):
+        self.assertTrue('#' not in panelcode.pstr_clean('1_2++3_4,,5 ### comment'))
+
+        # note that clean DOES NOT do page decompositing
+        self.assertTrue('++' in panelcode.pstr_clean('1_2++3_4,,5 ### comment'))
+        self.assertTrue(',,' in panelcode.pstr_clean('1_2++3_4,,5 ### comment'))
+
+    def test_pstr_strip_comments(self):
+        self.assertTrue('#' not in panelcode.pstr_strip_comments('1++2'))
+        self.assertEqual(panelcode.pstr_strip_comments('1_2_3 #comment') ,'1_2_3')
+        self.assertEqual(panelcode.pstr_strip_comments('1_2_3 # comment'),'1_2_3')
+        self.assertEqual(panelcode.pstr_strip_comments('1_2_3 # comment #comment'),'1_2_3')
+        self.assertEqual(panelcode.pstr_strip_comments('#comment'),'')
+        self.assertEqual(panelcode.pstr_strip_comments('# comment'),'')
+        self.assertEqual(panelcode.pstr_strip_comments('#### comment'),'')
+        self.assertEqual(panelcode.pstr_strip_comments('############'),'')
+
+    def test_pstr_decomposite_pages(self):
+        self.assertTrue('++' not in panelcode.pstr_decomposite_pages('1_2_3++4_5_6'))
+        self.assertTrue(',,' not in panelcode.pstr_decomposite_pages('1_2_3,,4_5_6'))        
+        self.assertTrue(len(panelcode.pstr_decomposite_pages('1++2++3_4++5').split('\n'))==4)
+        self.assertTrue(len(panelcode.pstr_decomposite_pages('1,,2,,3_4,,5').split('\n'))==4)
+        self.assertTrue(len(panelcode.pstr_decomposite_pages('1++2,,3_4++5').split('\n'))==4)
+
 if __name__ == '__main__':
     unittest.main()
