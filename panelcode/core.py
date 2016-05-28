@@ -199,8 +199,13 @@ def text_to_file (filename, content_string):
     with open(filename, "w") as text_file:
         text_file.write(content_string)
 
-def app_batch_svg ():
-    """..."""
+def app_batch_svg (batchstring):
+    """write a series of SVG files based on a string of many panelcodes"""
+    batchstring = pstr_decomposite_pages(batchstring)
+    pstrings = [x.strip() for x in batchstring.splitlines()]
+    for pstr in pstrings:
+        pstr=pstr_clean(pstr)
+        text_to_file('../script/output/'+pstr+'.svg', pstr_to_svg(pstr))
     # return '...'
 
 def app_batch_html ():
