@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .context import sample
+from .context import panelcode
 
 import unittest
 
@@ -13,4 +13,5 @@ class BasicTestSuite(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    print 'hi'
+#    unittest.main()
