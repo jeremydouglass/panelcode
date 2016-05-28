@@ -14,6 +14,41 @@ def pstr_parse (filename):
     # return '...'
 
 
+### CLEANERS
+
+def pstr_clean (pstr):
+    """run all cleaning functions on a panelcode string"""
+
+    pstr = pstr_strip_comments(pstr)
+    pstr = shorthand_groups(pstr)
+    return pstr
+
+def pstr_strip_comments (pstr):
+    """strip comments from a panelcode string"""
+    pstr = pstr.split('#', 1)[0] # remove comments
+    pstr = pstr.strip()          # remove whitespace from both ends
+    return pstr
+
+def pstr_decomposite_pages (pstr):
+    """split up pages"""
+    pstr = pstr.replace("++", "\n")
+    pstr = pstr.replace(",,", "\n")
+    return pstr
+
+
+### SHORTHANDS
+
+def shorthand_groups (pstr):
+    """run all cleaning functions on a panelcode string"""
+    pstr = pstr.replace("3C", "3(r2+1,1)")
+    pstr = pstr.replace("3D", "3(1+r2,1)")
+    pstr = pstr.replace("4E", "4(r3+1,1,1)")
+    pstr = pstr.replace("4C", "4(r3+1,1,1)") # same thing
+    pstr = pstr.replace("4D", "4(1+r3,1,1)") # ...?
+    pstr = pstr.replace("5H", "5(r2+1+r2,1)") # ...?
+    return pstr
+
+
 ### ANALYZERS
 
 def pstr_rowcount (pstr):
