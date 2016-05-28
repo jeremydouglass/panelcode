@@ -13,15 +13,15 @@ def pstr_parse (filename):
     """..."""
     # return '...'
 
-def pstr_rowcount (pgstring):
-    """..."""
+def pstr_rowcount (pstr):
+    """count the rows in a panelcode string"""
     rowcount = 0
-    rowarray = pgstring.split('_')
+    rowarray = pstr.split('_')
     row_marker = '_'
     tgroup_start = '('
     tgroup_end = ')'
     # rowarray = re.split("\()|_", pghtmlstring)' # http://stackoverflow.com/questions/1059559/python-split-strings-with-multiple-delimiters
-    tables = [x.strip() for x in pgstring.split(row_marker)] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
+    tables = [x.strip() for x in pstr.split(row_marker)] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
     rowheight = 'rowheight' # slug for replacing last, since we count rows as we go.
     for table in tables:
         if "(" not in table: # http://stackoverflow.com/questions/5473014/test-a-string-for-a-substring
@@ -53,7 +53,7 @@ def pstr_rowcount (pgstring):
     return rowcount
 
 def pstr_to_svg (code_string):
-    """..."""
+    """render a panelcode string as an SVG image"""
     # svg+html template
     svg_xml1 = """<?xml version="1.0" standalone="yes"?><svg width="75" height="126" viewBox="0 0 75 126" xmlns="http://www.w3.org/2000/svg"><foreignObject x="5" y="10" width="60" height="75"><body xmlns="http://www.w3.org/1999/xhtml"> <style> table.page{ layout: fixed; border: 1px solid black; width: 50px; padding: 0px; border-spacing: 0px 1px; background-color: #aaa; } table.page > tr, table.page > tr > td { border: 0px solid red; border-collapse: collapse; padding: 0px; border-spacing: 0px; } table.row { layout: fixed; border: 0px solid black; width: 100%; height: 100%; padding: 0px; border-spacing: 2px 1px; } table.row > tr > td { # height: 10px; border: 1px solid black; padding: 0px; background-color: #fff; } </style><table class='page'><tr><td>"""
     svg_xml2 = """</td></tr></table></body></foreignObject><foreignObject x="10" y="85" width="60" height="48"><body xmlns="http://www.w3.org/1999/xhtml"><div style='font-size: 6pt'>"""
@@ -68,15 +68,14 @@ def pstr_to_svg (code_string):
 #    """..."""
     # return '...'
 
-def pstr_to_html (pgstring):
-    """..."""
+def pstr_to_html (pstr):
+    """render a panelcode string as HTML"""
     pghtmlstring = ''
-
     tgroup_start = '('
     tgroup_end = ')'
     # print '\n----------------------------------------'
-    # print '\npgstring: ' + pgstring
-    tables = [x.strip() for x in pgstring.split('_')] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
+    # print '\npstr: ' + pstr
+    tables = [x.strip() for x in pstr.split('_')] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
     rowheight = 'rowheight' # slug for replacing last, since we count rows as we go.
     rowcount = 0
     for table in tables:
@@ -137,7 +136,7 @@ def pstr_to_html (pgstring):
         # print '\ntstring:\n' + tstring + '\n'
 
     print 'OLD rowcount check: ' + str(rowcount)
-    rowcount = pstr_rowcount(pgstring)
+    rowcount = pstr_rowcount(pstr)
     print 'NEW rowcount check: ' + str(rowcount)
     rowheight = 60/rowcount
     pghtmlstring = pghtmlstring.replace("rowheight", str(rowheight))
@@ -151,7 +150,7 @@ def pstr_to_html (pgstring):
 #    return html_string
 
 def text_to_file (filename, content_string):
-    """..."""    
+    """write text to a file"""    
     # text_to_file(page_output_dir + codestring + '.svg', pstr_to_svg(codestring))
     with open(filename, "w") as text_file:
         text_file.write(content_string)
