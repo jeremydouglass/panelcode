@@ -90,22 +90,6 @@ def pstr_rowcount (pstr):
             rowcount = rowcount + rowmax
     return rowcount
 
-def pstr_to_svg (code_string):
-    """render a panelcode string as an SVG image"""
-    # svg+html template
-    svg_xml1 = """<?xml version="1.0" standalone="yes"?><svg width="75" height="126" viewBox="0 0 75 126" xmlns="http://www.w3.org/2000/svg"><foreignObject x="5" y="10" width="60" height="75"><body xmlns="http://www.w3.org/1999/xhtml"> <style> table.page{ layout: fixed; border: 1px solid black; width: 50px; padding: 0px; border-spacing: 0px 1px; background-color: #aaa; } table.page > tr, table.page > tr > td { border: 0px solid red; border-collapse: collapse; padding: 0px; border-spacing: 0px; } table.row { layout: fixed; border: 0px solid black; width: 100%; height: 100%; padding: 0px; border-spacing: 2px 1px; } table.row > tr > td { # height: 10px; border: 1px solid black; padding: 0px; background-color: #fff; } </style><table class='page'><tr><td>"""
-    svg_xml2 = """</td></tr></table></body></foreignObject><foreignObject x="10" y="85" width="60" height="48"><body xmlns="http://www.w3.org/1999/xhtml"><div style='font-size: 6pt'>"""
-    svg_xml3 = """</div></body></foreignObject></svg>"""
-
-    # convert panelcode to html and embed in template
-    svg_text = svg_xml1 + pstr_to_html(code_string) + svg_xml2 + str(code_string) + svg_xml3
-
-    return svg_text
-
-#def pcode_to_svg (panelcode):
-#    """..."""
-    # return '...'
-
 
 ### RENDERERS
 
@@ -189,6 +173,22 @@ def pstr_to_html (pstr):
 #    html_string = ''
 #    html_string = '<table><tr><td></td><td></td></tr><tr><td></td><td></td></tr></table>'
 #    return html_string
+
+def pstr_to_svg (code_string):
+    """render a panelcode string as an SVG image"""
+    # svg+html template
+    svg_xml1 = """<?xml version="1.0" standalone="yes"?><svg width="75" height="126" viewBox="0 0 75 126" xmlns="http://www.w3.org/2000/svg"><foreignObject x="5" y="10" width="60" height="75"><body xmlns="http://www.w3.org/1999/xhtml"> <style> table.page{ layout: fixed; border: 1px solid black; width: 50px; padding: 0px; border-spacing: 0px 1px; background-color: #aaa; } table.page > tr, table.page > tr > td { border: 0px solid red; border-collapse: collapse; padding: 0px; border-spacing: 0px; } table.row { layout: fixed; border: 0px solid black; width: 100%; height: 100%; padding: 0px; border-spacing: 2px 1px; } table.row > tr > td { # height: 10px; border: 1px solid black; padding: 0px; background-color: #fff; } </style><table class='page'><tr><td>"""
+    svg_xml2 = """</td></tr></table></body></foreignObject><foreignObject x="10" y="85" width="60" height="48"><body xmlns="http://www.w3.org/1999/xhtml"><div style='font-size: 6pt'>"""
+    svg_xml3 = """</div></body></foreignObject></svg>"""
+
+    # convert panelcode to html and embed in template
+    svg_text = svg_xml1 + pstr_to_html(code_string) + svg_xml2 + str(code_string) + svg_xml3
+
+    return svg_text
+
+#def pcode_to_svg (panelcode):
+#    """..."""
+    # return '...'
 
 
 ### FILE OUTPUT
