@@ -85,5 +85,15 @@ class CleanTestSuite(unittest.TestCase):
         self.assertTrue(len(panelcode.pstr_decomposite_pages('1,,2,,3_4,,5').split('\n'))==4)
         self.assertTrue(len(panelcode.pstr_decomposite_pages('1++2,,3_4++5').split('\n'))==4)
 
+
+class ParseTestSuite(unittest.TestCase):
+    """Parser test cases."""
+
+    def test_parse_panelcode (self):
+        test_list   = ['3', '33', '3 3', '3_3', '333', '3_3_3', '303', '30', '03', '0', '']
+        for s in test_list:
+            self.assertTrue(len(panelcode.parse_panelcode(s))>0) # returns parsed objects, not nothing
+
+
 if __name__ == '__main__':
     unittest.main()
