@@ -89,11 +89,19 @@ class CleanTestSuite(unittest.TestCase):
 class ParseTestSuite(unittest.TestCase):
     """Parser test cases."""
 
+    def test_parse_example (self):
+        self.assertEqual(panelcode.parse_example("x=2+2")[0], 'x')
+        self.assertEqual(panelcode.parse_example("x=2+2")[1], '=')
+        self.assertEqual(panelcode.parse_example("x=2+2")[2], '2')
+        self.assertEqual(panelcode.parse_example("x=2+2")[3], '+')
+        self.assertEqual(panelcode.parse_example("x=2+2")[4], '2')
+        
     def test_parse_panelcode (self):
-        test_list   = ['3', '33', '3 3', '3_3', '333', '3_3_3', '303', '30', '03', '0', '']
+        test_list   = ['3\n3', '3(\n)3()', '3', '33', '3 3', '3_3', '333', '3_3_3', '303', '30', '03', '0', '', '3()', '3()3()', '33()', '3()3']
         for s in test_list:
-            self.assertTrue(len(panelcode.parse_panelcode(s))>0) # returns parsed objects, not nothing
-
+            result = panelcode.parse_panelcode(s)
+            self.assertTrue(len(result)>0) # returns parsed objects, not nothing
+            print "Matches: {0}".format(result) + ' in: ' + str(s)
 
 if __name__ == '__main__':
     unittest.main()
