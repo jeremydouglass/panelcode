@@ -20,9 +20,10 @@ def parse_panelcode (pstr):
     #  BNF
     #  %start panelcode
     #  
+    #  <panelcodeblock>    ...is a text string / file containing one or more, separated by linebreaks:
+    #                       <panelcode> | <panelcode> <comment> | <comment> | <blankline>
+    #
     #  <panelcode>         :=  <page> | <pagegroup>
-    #  	                    | <page> <linebreak> <panelcode>
-    #  						| <pagegroup> <linebreak> <panelcode>
     #  
     #  <pagegroup>         :=  <page> <pagejoin> <page> | <page> <pagejoin> <pagegroup>
     #    <pagejoin>        :=  <horizontaljoin> | <verticaljoin>
@@ -60,11 +61,13 @@ def parse_panelcode (pstr):
     #  <number>            :=  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
     #  <letter>            :=  a | b | c | ... | y | z
 
-    page            = pp.Literal("3") | pp.Literal("0") # placeholder
-    pagegroup       = pp.Literal("3()") # test placeholder
-    
-    panelcode01     = pp.OneOrMore(page)
+    page            = pp.Literal("3()") | pp.Literal("3") |  pp.Literal("0") # placeholder
+    horizontaljoin  = pp.Literal(",,")
+    verticaljoin    = pp.Literal("++")
+    pagejoin        = ( horizontaljoin | verticaljoin )
+    pagegroup       = pp.Group ( page + pp.ZeroOrMore( pagejoin + page ))
     panelcode       = pp.Group ( pp.OneOrMore( pagegroup | page ))
+    # panelcode01     = pp.OneOrMore(page)
     
     try:
         result = panelcode.parseString(pstr)

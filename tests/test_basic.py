@@ -97,7 +97,7 @@ class ParseTestSuite(unittest.TestCase):
         self.assertEqual(panelcode.parse_example("x=2+2")[4], '2')
         
     def test_parse_panelcode (self):
-        test_list   = ['3\n3', '3(\n)3()', '3', '33', '3 3', '3_3', '333', '3_3_3', '303', '30', '03', '0', '', '3()', '3()3()', '33()', '3()3']
+        test_list   = ['3++3', '3++3++3', '3,,3', '3++3(),,3', '3\n3', '3(\n)3()', '3', '33', '3 3', '3_3', '333', '3_3_3', '303', '30', '03', '0', '', '3()', '3()3()', '33()', '3()3']
         for s in test_list:
             result = panelcode.parse_panelcode(s)
             self.assertTrue(len(result)>0) # returns parsed objects, not nothing
