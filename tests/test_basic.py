@@ -97,11 +97,20 @@ class ParseTestSuite(unittest.TestCase):
         self.assertEqual(panelcode.parse_example("x=2+2")[4], '2')
         
     def test_parse_panelcode (self):
-        test_list   = ['3++3', '3++3++3', '3,,3', '3++3(),,3', '3\n3', '3(\n)3()', '3', '33', '3 3', '3_3', '333', '3_3_3', '303', '30', '03', '0', '', '3()', '3()3()', '33()', '3()3']
+        print "\n\n-----TEST parse_panelcode-----\n"
+        test_list   = ['', '3', '33', '3 3', '3_3', '333',
+                        '3_3_3', '303', '30', '03', '0', '3()',
+                        '3()3()', '33()', '3()3',
+                        '3++3', '3++3++3', '3,,3', '3++3(),,3',
+                        '3\n3', '3\n\n\n3', '3(\n)3()']
         for s in test_list:
-            result = panelcode.parse_panelcode(s)
-            self.assertTrue(len(result)>0) # returns parsed objects, not nothing
-            print "Matches: {0}".format(result) + ' in: ' + str(s)
+            try:  
+              result = panelcode.parse_panelcode(s)
+              self.assertTrue(len(result)>0) # returns parsed objects, not nothing
+              print "        In: " + str(s) 
+              print "...matches: {0}".format(result)
+            except panelcode.pp.ParseException as x:
+                print "ParseException: {0}".format(str(x)) + 'in: ' + str(s) + '\n'
 
 if __name__ == '__main__':
     unittest.main()

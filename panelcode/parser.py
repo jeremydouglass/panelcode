@@ -30,7 +30,7 @@ def parse_panelcode (pstr):
     #    <horizontaljoin>  :=  "++";
     #    <verticaljoin>    :=  ",,";
     #  
-    #  <page>              :=  <row> | <row> <rowseparator> <page> | <emptypage> | <uncodedpage>
+    #  <page>              :=  <row> | <row> <rowseparator> <row> | <emptypage> | <uncodedpage>
     #    <rowseparator>    :=  "_";
     #    <emptypage>       :=  <emptyrow>
     #    <uncodedpage>     :=  <uncodedrow>
@@ -61,19 +61,26 @@ def parse_panelcode (pstr):
     #  <number>            :=  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
     #  <letter>            :=  a | b | c | ... | y | z
 
-    page            = pp.Literal("3()") | pp.Literal("3") |  pp.Literal("0") # placeholder
+
+    row             = pp.Literal("3()") | pp.Literal("3") |  pp.Literal("0") # placeholder
+    emptyrow        = pp.Literal("0")
+    uncodedrow      = pp.Literal("(_)")
+    emptypage       = emptyrow
+    uncodedpage     = uncodedrow
+    rowseparator    = pp.Literal("_")
+    page            = pp.Group( emptypage | uncodedpage | row + pp.ZeroOrMore( pp.Optional(rowseparator) + row ) )
     horizontaljoin  = pp.Literal(",,")
     verticaljoin    = pp.Literal("++")
     pagejoin        = ( horizontaljoin | verticaljoin )
-    pagegroup       = pp.Group ( page + pp.ZeroOrMore( pagejoin + page ))
-    panelcode       = pp.Group ( pp.OneOrMore( pagegroup | page ))
-    # panelcode01     = pp.OneOrMore(page)
+    pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ))
+    panelcode       = pp.Group( pp.OneOrMore( pagegroup | page ))
     
     try:
         result = panelcode.parseString(pstr)
         # print pstr + " Matches: {0}".format(result)
         return result
     except pp.ParseException as x:
-        print "\n  ParseException: {0}".format(str(x)) + 'in: ' + str(pstr) + '\n'
-        return [''] ######### <---- this temporarily supresses errors in the test suite
+        # print "\n  ParseException: {0}".format(str(x)) + 'in: ' + str(pstr) + '\n'
+        raise x
+        # return [''] ######### <---- this temporarily supresses errors in the test suite
 
