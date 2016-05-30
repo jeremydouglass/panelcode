@@ -137,13 +137,11 @@ def pstr_to_html (pstr):
     # print '\npstr: ' + pstr
     tables = [x.strip() for x in pstr.split('_')] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
     rowheight = 'rowheight' # slug for replacing last, since we count rows as we go.
-    rowcount = 0
     for table in tables:
         print '     table: ' + str(table)
         tstring = ''
         tstring = '<table class=\'row\' height=\''+str(rowheight)+'\'>\n'
         if "(" not in table: # http://stackoverflow.com/questions/5473014/test-a-string-for-a-substring
-            rowcount += 1 # increment
             tstring += '  <tr height=\''+str(rowheight)+'\'>\n'
             # tstring += '  <tr>\n'
             tstring += '    '
@@ -158,7 +156,6 @@ def pstr_to_html (pstr):
             tbgroup = ((table.split(tgroup_start))[1].split(tgroup_end)[0]) #http://stackoverflow.com/questions/3368969/find-string-between-two-substrings
             print '       tbgroup: ' + tbgroup
             tbgroup_rows = [x.strip() for x in tbgroup.split(',')]
-            rowmax = 1 # starting value
             for row in tbgroup_rows:
                 print '         row: ' + row
                 tstring += '  <tr height=\''+str(rowheight)+'\'>\n'
@@ -181,7 +178,6 @@ def pstr_to_html (pstr):
                                 if attrib.startswith('r'):
                                     tstring += ' rowspan=\'' + attrib[1:] + '\'' # value minus 'r' prefix
                                     print '---r attrib:' + attrib[1:]
-                                    rowmax = max(rowmax,int(attrib[1:])) # update with tallest panel
                                 elif attrib.startswith('c'):
                                     tstring += ' colspan=\'' + attrib[1:] + '\'' # value minus 'c' prefix
                                 else:
@@ -191,16 +187,11 @@ def pstr_to_html (pstr):
                         tstring += '></td>'
                     tstring += '\n'
                 tstring += '  </tr>\n'
-            rowcount = rowcount + rowmax
-            print '   rowmax:   ' + str(rowmax)
-            print '   rowcount: ' + str(rowcount)
         tstring += '</table>\n'
         pghtmlstring += tstring # add latest table html to page html
         # print '\ntstring:\n' + tstring + '\n'
 
-    print 'OLD rowcount check: ' + str(rowcount)
     rowcount = pstr_rowcount(pstr)
-    print 'NEW rowcount check: ' + str(rowcount)
     rowheight = 60/rowcount
     pghtmlstring = pghtmlstring.replace("rowheight", str(rowheight))
     
