@@ -6,31 +6,57 @@
 from .context import panelcode
 
 import unittest
+from os import linesep
 
-batchstring = """1
-0
-0_0_0
-0_(2+0+2)_0
-0_1_(0+1)
-0_1_(1+0)
-0_2_0
-0_3_0
-1_2_3_4_5_6
-1_3_2_4
-2_(1,0)
+panelcode_test_string = """
+1
 2_2
-2_2++3_3
-2_2_2_1_1_2_1
 2_3
 2_3_2
-2_3_3(1+r2,1)
 2_3_5
+
+1_3_2_4
+1_2_3_4_5_6
+3_3_3_3_3
+2_2_2_1_1_2_1
+
+3
+3_3
+3_3_3
+
+33
+333
+
+0
+0_0_0
+0_3_0
+
+00
+03
+30
+303
+
+3()
+3()3()
+3()3()3()
+
+33()
+3()3
+
+3++3
+3++3++3
+3,,3
+3,,3,,3
+
+3++3;3,,3
+3_3;3_3
+
+2_(1,0)
+2_2++3_3
+2_3_3(1+r2,1)
 2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)
-3C
-3D
 3(r2+0,1)
 3(r2+1,1)
-3_3_3_3_3
 3_3_3++2_5(r2+2,2)
 4(r3+1,1,1)
 4(1+r3,1,1)
@@ -38,15 +64,60 @@ batchstring = """1
 5(r2+1+r2,1)
 5(r2+2,2)
 5(2+r2,2)
-1
+
+0_(2+0+2)_0
+0_1_(0+1)
+0_1_(1+0)
+
+3C
+3D
+
+3\n3
+3\n\n\n3
+
+3;3
+3;3;
+
+3_
+_3
+
+3 3
+
+3++3(),,3
+3++(),,3
+
+()
+()_()
+()()
+
 (_)
+(_)_(_)
+(_)(_)
+
+3_(_)_3
+(_)_3_(_)
+
+(_)++(_)
+(_),,(_)
+(_);(_)
 """
 
-batchstring2 = """3x5            # grid shorthand
+bad_strings = """
+3(
+3)
+3;
+;3
+
+3(\n)3()
+
+(())
+((_))
+"""
+
+panelcode_test_string_3 = """3x5            # grid shorthand
 	0_1_(0_1)      # zero panels
 	2_3_2++        # page-compositing
 	2_2++3+3       #"""
-
 
 class BasicTestSuite(unittest.TestCase):
     """Basic test cases."""
@@ -56,8 +127,22 @@ class BasicTestSuite(unittest.TestCase):
 #        assert True
 
     def test_app_batch_svg(self):
-    	panelcode.app_batch_svg(batchstring)
+        test_string = panelcode_test_string
+
+        ## this function needs to be replaced with pyparser output,
+        ## but temporarily cleaning the input in-place during testing
+        test_string = linesep.join([s for s in test_string.splitlines() if s.strip()]) # remove empty lines from string
+        test_string = test_string.replace("()", "") # collapse empty rowgroups
+        test_string = test_string.replace("(_)", "0") # replace uncoded page markers as empty pages
+        test_string = test_string.replace(";", "\n") # split pages into lines
+
+    	panelcode.app_batch_svg(test_string)
         assert True
+
+###  currently already cascade tested by test_app_batch_svg
+#    def test_app_svg_preview_page(self):
+#        panelcode.app_svg_preview_page(svg_file_list,'script/output/','index.html')
+#        assert True
 
 
 class CleanTestSuite(unittest.TestCase):
@@ -100,16 +185,9 @@ class ParseTestSuite(unittest.TestCase):
         
     def test_parse_panelcode (self):
         print "\n\n-----TEST parse_panelcode-----\n"
-        test_list   = [ '3', '33', '3 3', '3_3', '333',
-                        '3_3_3', '303', '30', '03', '0', '3()',
-                        '3()3()', '33()', '3()3',
-                        '3++3', '3++3++3', '3,,3', '3++3(),,3',
-                        '3\n3', '3\n\n\n3', '3(\n)3()', '3;3',
-                        '3;', '3;3;', '3++3;3,,3', '3_3;3_3',
-                        '', ';3']
-        test_list = batchstring.split()
-        print test_list
-        for s in test_list:
+        test_string = panelcode_test_string.split()
+        print test_string
+        for s in test_string:
             print "        In: " + str(s) 
             try:  
               result = panelcode.parse_panelcode(s)

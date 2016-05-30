@@ -100,7 +100,6 @@ def pstr_to_html (pstr):
     tgroup_end = ')'
     # print '\n----------------------------------------'
     # print '\npstr: ' + pstr
-    pstr = pstr.replace("(_)", "(0)") # temporary hack to pass uncoded page markers as 0-row pages
     tables = [x.strip() for x in pstr.split('_')] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
     rowheight = 'rowheight' # slug for replacing last, since we count rows as we go.
     rowcount = 0
@@ -113,8 +112,11 @@ def pstr_to_html (pstr):
             tstring += '  <tr height=\''+str(rowheight)+'\'>\n'
             # tstring += '  <tr>\n'
             tstring += '    '
-            for cellcount in range(0,int(table)):
-                tstring += '<td></td>'
+            try:
+                for cellcount in range(0,int(table)):
+                    tstring += '<td></td>'
+            except ValueError:
+                tstring += '<td class="empty"></td>'
             tstring += '\n'
             tstring += '  </tr>\n'
         elif "(" in table: # http://stackoverflow.com/questions/3437059/does-python-have-a-string-contains-substring-method
@@ -202,11 +204,16 @@ def text_to_file (filename, content_string):
 
 def app_batch_svg (batchstring):
     """write a series of SVG files based on a string of many panelcodes"""
+    svg_file_list = []
     batchstring = pstr_decomposite_pages(batchstring)
     pstrings = [x.strip() for x in batchstring.splitlines()]
     for pstr in pstrings:
         pstr=pstr_clean(pstr)
-        text_to_file('../script/output/'+pstr+'.svg', pstr_to_svg(pstr))
+        if len(pstr)>0:
+            text_to_file('../script/output/'+pstr+'.svg', pstr_to_svg(pstr))
+            svg_file_list.append(str(pstr)+'.svg')
+
+    app_svg_preview_page(svg_file_list,'../script/output/','index.html')
     # return '...'
 
 def app_batch_html ():
@@ -218,7 +225,7 @@ def app_svg_preview_page (filelist,outpath,outfilename):
     # app_svg_preview_page(svg_file_list,'script/output/','index.html')    
     preview_html1 = """<html>\n  <body>\n    <h1>Panelcode SVG output preview</h1>\n"""
     preview_html2 = """  </body>\n</html>"""
-    with open('script/output/index.html', "w") as index_file:
+    with open('../script/output/index.html', "w") as index_file:
         index_file.write(preview_html1)
         for pgfile in filelist:
             index_file.write('    <img src="' + pgfile + '"/>\n')
