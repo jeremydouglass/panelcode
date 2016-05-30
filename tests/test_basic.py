@@ -200,23 +200,22 @@ class ParseTestSuite(unittest.TestCase):
         test_string = panelcode_test_string.split()
         vprint(test_string)
         for s in test_string:
+            vprint("\n           In:  " + str(s))
+            vprint("--------------  -----------------")
             try:  
-              result = panelcode.parse_panelcode(s)
-              self.assertTrue(len(result)>0) # returns parsed objects, not nothing
-              vprint("\n        In: " + str(s))
-              vprint("...matches: {0}".format(result))
-              vprint("...as Dict: " + str(result.asDict()))
-              try:
-                continue
-                # vprint(result['panelcode'])
-                # vprint(result['panelcode']['pagegroup'])
-                # vprint(result['panelcode']['pagegroup']['page'])
-                # vprint(result['panelcode']['pagegroup']['page']['rows'])
-              except: ## some pages have no rows -- empty an uncoded. could force them to have rows. might help for css and html / svg rendering.
-                pass              
+                result = panelcode.parse_panelcode(s)
+                self.assertTrue(len(result)>0) # returns parsed objects, not nothing
+                vprint("   ...matches:  {0}".format(result))
+                vprint("   ...as Dict:  " + str(result.asDict()))
+                try:
+                    vprint("['panelcode']: ", result['panelcode'])
+                    vprint("['pagegroup']: ", result['panelcode']['pagegroup'])
+                    vprint("     ['page']: ", result['panelcode']['pagegroup']['page'])
+                    vprint("     ['rows']:", result['panelcode']['pagegroup']['page']['rows'])
+                except: ## some pages have no rows -- empty an uncoded. could force them to have rows. might help for css and html / svg rendering.
+                    pass              
             except panelcode.pp.ParseException as x:
-                vprint("\n        In: " + str(s))
-                vprint(" ...except: ParseException")
+                vprint("    ...except:  ParseException")
                 # print "...ParseException: {0}".format(str(x)) + '\n'
                 pass
 
