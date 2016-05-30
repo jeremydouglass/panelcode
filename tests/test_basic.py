@@ -112,7 +112,14 @@ class ParseTestSuite(unittest.TestCase):
               result = panelcode.parse_panelcode(s)
               self.assertTrue(len(result)>0) # returns parsed objects, not nothing
               print "...matches: {0}".format(result)
-
+              print result.asDict()
+              try:
+                print result['panelcode']
+                print result['panelcode']['pagegroup']
+                print result['panelcode']['pagegroup']['page']
+                print result['panelcode']['pagegroup']['page']['row']
+              except: ## some pages have no rows -- empty an uncoded. could force them to have rows. might help for css and html / svg rendering.
+                pass              
             except panelcode.pp.ParseException as x:
                 print "...ParseException" + '\n'
                 print "...ParseException: {0}".format(str(x)) + '\n'

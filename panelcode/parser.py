@@ -67,7 +67,7 @@ def parse_panelcode (pstr):
     uncodedrow      = pp.Literal("(_)")
     spanmodifier    = pp.Regex(r"[rc][1-9][0-9]*")
 
-    groupunit       = pp.Group( emptyrow | numrow | numrow + spanmodifier | spanmodifier )
+    groupunit       = pp.Group( emptyrow | numrow | numrow + spanmodifier | spanmodifier ).setResultsName('unit')
     newcol          = pp.Literal("+")
     newrow          = pp.Literal(",")
     groupseparator  = ( newcol | newrow )
@@ -80,13 +80,13 @@ def parse_panelcode (pstr):
     emptypage       = emptyrow
     uncodedpage     = uncodedrow
     rowseparator    = pp.Literal("_")
-    page            = pp.Group( emptypage | uncodedpage | row + pp.ZeroOrMore( pp.Optional(rowseparator) + row ) )
+    page            = pp.Group( emptypage | uncodedpage | pp.Group(row + pp.ZeroOrMore( pp.Optional(rowseparator) + row )).setResultsName('row') ).setResultsName('page')
     horizontaljoin  = pp.Literal(",,")
     verticaljoin    = pp.Literal("++")
-    pagejoin        = ( horizontaljoin | verticaljoin )
+    pagejoin        = ( horizontaljoin | verticaljoin ).setResultsName('pagejoin')
     pageseparator   = pp.Literal(";")
-    pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ) + pp.Optional(pageseparator))
-    panelcode       = pp.Group( pp.OneOrMore( pagegroup | page ))
+    pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ) + pp.Optional(pageseparator)).setResultsName('pagegroup')
+    panelcode       = pp.Group( pp.OneOrMore( pagegroup | page ) ).setResultsName('panelcode')
     
     try:
         result = panelcode.parseString(pstr)
