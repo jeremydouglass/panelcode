@@ -4,8 +4,20 @@
 #    python -m tests.test_basic
 
 from .context import panelcode
-
 import unittest
+
+
+verbose = 1
+# quick verbose printing hack, as per http://stackoverflow.com/questions/5980042/how-to-implement-the-verbose-or-v-option-into-a-script
+if verbose:
+    def vprint(*args):
+        for arg in args:
+           # print 'vprint: ',
+           print arg,
+        print
+else:   
+    vprint = lambda *a: None      # do-nothing function
+
 
 panelcode_test_string = """
 1
@@ -89,16 +101,16 @@ _3
 ()_()
 ()()
 
-(_)
-(_)_(_)
-(_)(_)
+(~)
+(~)_(~)
+(~)(~)
 
-3_(_)_3
-(_)_3_(_)
+3_(~)_3
+(~)_3_(~)
 
-(_)++(_)
-(_),,(_)
-(_);(_)
+(~)++(~)
+(~),,(~)
+(~);(~)
 """
 
 bad_strings = """
@@ -110,7 +122,7 @@ bad_strings = """
 3(\n)3()
 
 (())
-((_))
+((~))
 """
 
 panelcode_test_string_3 = """3x5            # grid shorthand
@@ -118,19 +130,16 @@ panelcode_test_string_3 = """3x5            # grid shorthand
 	2_3_2++        # page-compositing
 	2_2++3+3       #"""
 
+
 class BasicTestSuite(unittest.TestCase):
     """Basic test cases."""
-
-#    def test_absolute_truth_and_meaning(self):
-#        print 'absolute truth'
-#        assert True
 
     def test_app_batch_svg(self):
         test_string = panelcode.pstr_clean(panelcode_test_string) # strip all kinds of bad behavior
 
         ## this function needs to be replaced with pyparser output,
         ## but temporarily cleaning the input in-place during testing
-        test_string = test_string.replace("(_)", "0") # replace uncoded page markers as empty pages
+        test_string = test_string.replace("(~)", "0") # replace uncoded page markers as empty pages
         test_string = test_string.replace(";", "\n") # split pages into lines
 
     	panelcode.app_batch_svg(test_string)
@@ -140,7 +149,6 @@ class BasicTestSuite(unittest.TestCase):
 #    def test_app_svg_preview_page(self):
 #        panelcode.app_svg_preview_page(svg_file_list,'script/output/','index.html')
 #        assert True
-
 
 class CleanTestSuite(unittest.TestCase):
     """Clean test cases."""
@@ -163,18 +171,19 @@ class CleanTestSuite(unittest.TestCase):
         self.assertEqual(panelcode.pstr_strip_comments('############'),'')
 
     def test_pstr_decomposite_pages(self):
+        """Test that horizontal and vertical pagegroups break down correctly."""
         self.assertTrue('++' not in panelcode.pstr_decomposite_pages('1_2_3++4_5_6'))
         self.assertTrue(',,' not in panelcode.pstr_decomposite_pages('1_2_3,,4_5_6'))        
-        self.assertTrue(len(panelcode.pstr_decomposite_pages('1++2++3_4++5').split('\n'))==4)
-        self.assertTrue(len(panelcode.pstr_decomposite_pages('1,,2,,3_4,,5').split('\n'))==4)
+        self.assertTrue(len(panelcode.pstr_decomposite_pages('1++2').split('\n'))==2)
+        self.assertTrue(len(panelcode.pstr_decomposite_pages('1,,2_3,,3').split('\n'))==3)
         self.assertTrue(len(panelcode.pstr_decomposite_pages('1++2,,3_4++5').split('\n'))==4)
 
     def test_pstr_minify (self):
         result = panelcode.pstr_minify(panelcode_test_string)
-        print 'Minified: ' + result
+        vprint('Minified: ' + result)
         self.assertTrue('\n' not in result)
         self.assertTrue('\r' not in result)
-        
+
 class ParseTestSuite(unittest.TestCase):
     """Parser test cases."""
 
@@ -186,26 +195,30 @@ class ParseTestSuite(unittest.TestCase):
         self.assertEqual(panelcode.parse_example("x=2+2")[4], '2')
         
     def test_parse_panelcode (self):
-        print "\n\n-----TEST parse_panelcode-----\n"
+        vprint("\n\n-----TEST parse_panelcode-----\n")
+        test_string = panelcode.pstr_clean(panelcode_test_string)
         test_string = panelcode_test_string.split()
-        print test_string
+        vprint(test_string)
         for s in test_string:
-            print "        In: " + str(s) 
             try:  
               result = panelcode.parse_panelcode(s)
               self.assertTrue(len(result)>0) # returns parsed objects, not nothing
-              print "...matches: {0}".format(result)
-              print result.asDict()
+              vprint("\n        In: " + str(s))
+              vprint("...matches: {0}".format(result))
+              vprint("...as Dict: " + str(result.asDict()))
               try:
-                print result['panelcode']
-                print result['panelcode']['pagegroup']
-                print result['panelcode']['pagegroup']['page']
-                print result['panelcode']['pagegroup']['page']['row']
+                continue
+                # vprint(result['panelcode'])
+                # vprint(result['panelcode']['pagegroup'])
+                # vprint(result['panelcode']['pagegroup']['page'])
+                # vprint(result['panelcode']['pagegroup']['page']['rows'])
               except: ## some pages have no rows -- empty an uncoded. could force them to have rows. might help for css and html / svg rendering.
                 pass              
             except panelcode.pp.ParseException as x:
-                print "...ParseException" + '\n'
-                print "...ParseException: {0}".format(str(x)) + '\n'
+                vprint("\n        In: " + str(s))
+                vprint(" ...except: ParseException")
+                # print "...ParseException: {0}".format(str(x)) + '\n'
+                pass
 
 if __name__ == '__main__':
     unittest.main()

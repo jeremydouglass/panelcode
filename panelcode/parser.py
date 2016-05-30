@@ -62,38 +62,39 @@ def parse_panelcode (pstr):
     #+ <countingnums>      :=  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
     countingnums    = pp.Regex(r"[1-9]") # or support 10+... pp.Regex(r"[1-9][0-9]*")
-    numrow          = countingnums # pp.Literal("3") # placeholder
-    emptyrow        = pp.Literal("0") # or...?  pp.Literal("E")
-    uncodedrow      = pp.Literal("(_)")
-    spanmodifier    = pp.Regex(r"[rc][1-9][0-9]*")
-
-    groupunit       = pp.Group( emptyrow | numrow | numrow + spanmodifier | spanmodifier ).setResultsName('unit')
+    rowseparator    = pp.Suppress(pp.Literal("_"))
+    groupopen       = pp.Suppress(pp.Literal("("))
+    groupclose      = pp.Suppress(pp.Literal(")"))
     newcol          = pp.Literal("+")
     newrow          = pp.Literal(",")
+    pageseparator   = pp.Suppress(pp.Literal(";"))
+    verticaljoin    = pp.Literal("++")
+    horizontaljoin  = pp.Literal(",,")
+
+    numrow          = countingnums # pp.Literal("3") # placeholder
+    emptyrow        = pp.Literal("0").setResultsName('emptyrow') # or...?  pp.Literal("E")
+    uncodedrow      = pp.Group( groupopen + pp.Literal("~").setResultsName('uncoded') + groupclose )
+    spanmodifier    = pp.Regex(r"[rc][1-9][0-9]*").setResultsName('spanmodifier')
+
+    groupunit       = pp.Group( emptyrow | numrow | numrow + spanmodifier | spanmodifier ).setResultsName('unit')
     groupseparator  = ( newcol | newrow )
     grouprowcontents = pp.Group( groupunit + pp.ZeroOrMore( groupseparator + groupunit ) )
-    groupopen       = pp.Literal("(")
-    groupclose      = pp.Literal(")")
     grouprow        = pp.Group( groupopen + grouprowcontents + groupclose )# pp.Literal("3()") # placeholder
 
     row             = grouprow | numrow | emptyrow | uncodedrow
     emptypage       = emptyrow
     uncodedpage     = uncodedrow
-    rowseparator    = pp.Literal("_")
-    page            = pp.Group( emptypage | uncodedpage | pp.Group(row + pp.ZeroOrMore( pp.Optional(rowseparator) + row )).setResultsName('row') ).setResultsName('page')
-    horizontaljoin  = pp.Literal(",,")
-    verticaljoin    = pp.Literal("++")
+    page            = pp.Group( emptypage | uncodedpage | pp.Group(row + pp.ZeroOrMore( pp.Optional(rowseparator) + row )).setResultsName('rows') ).setResultsName('page')
     pagejoin        = ( horizontaljoin | verticaljoin ).setResultsName('pagejoin')
-    pageseparator   = pp.Literal(";")
     pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ) + pp.Optional(pageseparator)).setResultsName('pagegroup')
     panelcode       = pp.Group( pp.OneOrMore( pagegroup | page ) ).setResultsName('panelcode')
     
     try:
         result = panelcode.parseString(pstr)
+        # result = panelcode.parseString(pstr)
         # print pstr + " Matches: {0}".format(result)
         return result
     except pp.ParseException as x:
         # print "\n  ParseException: {0}".format(str(x)) + 'in: ' + str(pstr) + '\n'
         raise x
         # return [''] ######### <---- this temporarily supresses errors in the test suite
-
