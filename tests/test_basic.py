@@ -173,7 +173,8 @@ class CleanTestSuite(unittest.TestCase):
         result = panelcode.pstr_minify(panelcode_test_string)
         print 'Minified: ' + result
         self.assertTrue('\n' not in result)
-
+        self.assertTrue('\r' not in result)
+        
 class ParseTestSuite(unittest.TestCase):
     """Parser test cases."""
 
