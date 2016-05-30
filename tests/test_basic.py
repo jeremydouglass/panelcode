@@ -169,6 +169,10 @@ class CleanTestSuite(unittest.TestCase):
         self.assertTrue(len(panelcode.pstr_decomposite_pages('1,,2,,3_4,,5').split('\n'))==4)
         self.assertTrue(len(panelcode.pstr_decomposite_pages('1++2,,3_4++5').split('\n'))==4)
 
+    def test_pstr_minify (self):
+        result = panelcode.pstr_minify(panelcode_test_string)
+        print 'Minified: ' + result
+        self.assertTrue('\n' not in result)
 
 class ParseTestSuite(unittest.TestCase):
     """Parser test cases."""

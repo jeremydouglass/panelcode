@@ -68,7 +68,6 @@ def pstr_decomposite_pages (pstr):
 def pstr_minify (pstr):
     pstr = pstr_clean(pstr)
     pstr = pstr.replace("\n", "; ")
-    print 'Minified: ' + pstr
     return pstr
 
 
