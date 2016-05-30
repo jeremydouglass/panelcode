@@ -6,13 +6,13 @@
 import pyparsing as pp
 # from pyparsing import Word, Optional, Group, Literal, alphas, nums, ZeroOrMore, OneOrMore, ParseException
 
-def parse_example (str):
-    integer = pp.Word( pp.nums ) # simple unsigned integer
-    variable = pp.Word( pp.alphas, max=1 ) # single letter variable, such as x, z, m, etc.
-    arithOp = pp.Word( "+-*/", max=1 ) # arithmetic operators
-    equation = variable + "=" + integer + arithOp + integer # will match "x=2+2", etc.
-    result = equation.parseString(str)
-    return result
+# def parse_example (str):
+#     integer = pp.Word( pp.nums ) # simple unsigned integer
+#     variable = pp.Word( pp.alphas, max=1 ) # single letter variable, such as x, z, m, etc.
+#     arithOp = pp.Word( "+-*/", max=1 ) # arithmetic operators
+#     equation = variable + "=" + integer + arithOp + integer # will match "x=2+2", etc.
+#     result = equation.parseString(str)
+#     return result
 
 def parse_panelcode (pstr):
     """..."""

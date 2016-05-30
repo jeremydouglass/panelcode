@@ -187,12 +187,12 @@ class CleanTestSuite(unittest.TestCase):
 class ParseTestSuite(unittest.TestCase):
     """Parser test cases."""
 
-    def test_parse_example (self):
-        self.assertEqual(panelcode.parse_example("x=2+2")[0], 'x')
-        self.assertEqual(panelcode.parse_example("x=2+2")[1], '=')
-        self.assertEqual(panelcode.parse_example("x=2+2")[2], '2')
-        self.assertEqual(panelcode.parse_example("x=2+2")[3], '+')
-        self.assertEqual(panelcode.parse_example("x=2+2")[4], '2')
+#    def test_parse_example (self):
+#        self.assertEqual(panelcode.parse_example("x=2+2")[0], 'x')
+#        self.assertEqual(panelcode.parse_example("x=2+2")[1], '=')
+#        self.assertEqual(panelcode.parse_example("x=2+2")[2], '2')
+#        self.assertEqual(panelcode.parse_example("x=2+2")[3], '+')
+#        self.assertEqual(panelcode.parse_example("x=2+2")[4], '2')
         
     def test_parse_panelcode (self):
         vprint("\n\n-----TEST parse_panelcode-----\n")
