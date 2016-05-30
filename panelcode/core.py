@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from os import linesep
+
 def load_file (pc_filename):
     """..."""
     filecontents = []
@@ -18,9 +20,13 @@ def pstr_parse (filename):
 
 def pstr_clean (pstr):
     """run all cleaning functions on a panelcode string"""
-
     pstr = pstr_strip_comments(pstr)
+    pstr = pstr_remove_empty_lines(pstr)
+    pstr = pstr_remove_empty_rowgroups(pstr)
+    pstr = pstr_collapse_row_separators(pstr)
+    pstr = pstr_fill_row_gaps(pstr)
     pstr = shorthand_groups(pstr)
+    
     return pstr
 
 def pstr_strip_comments (pstr):
@@ -29,10 +35,40 @@ def pstr_strip_comments (pstr):
     pstr = pstr.strip()          # remove whitespace from both ends
     return pstr
 
+def pstr_remove_empty_lines (pstr):
+    """remove empty lines from string""" 
+    pstr = linesep.join([s for s in pstr.splitlines() if s.strip()])
+    return pstr
+
+def pstr_remove_empty_rowgroups (pstr):
+    """remove empty rowgroups: () from string""" 
+    pstr = pstr.replace("()", "") # collapse empty rowgroups
+    return pstr
+    
+def pstr_collapse_row_separators (pstr):
+    """collapse row separators: _ to one character""" 
+    pstr = pstr.replace("__", "_") # collapse empty rowgroups
+    return pstr
+    
+def pstr_fill_row_gaps (pstr):
+    """fill row gaps, especially at beginning and end of line"""
+    pstr = pstr.replace(" _", "0_") # collapse empty rowgroups
+    pstr = pstr.replace("_ ", "_0") # collapse empty rowgroups
+    pstr = pstr.replace("\n_", "\n0_") # fix row separator at line begin
+    pstr = pstr.replace("_\n", "_0\n") # fix row separator at line end
+    return pstr
+    
 def pstr_decomposite_pages (pstr):
     """split up pages"""
     pstr = pstr.replace("++", "\n")
     pstr = pstr.replace(",,", "\n")
+    return pstr
+
+
+def pstr_minify (pstr):
+    pstr = pstr_clean(pstr)
+    pstr = pstr.replace("\n", "; ")
+    print 'Minified: ' + pstr
     return pstr
 
 

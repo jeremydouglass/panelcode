@@ -6,7 +6,6 @@
 from .context import panelcode
 
 import unittest
-from os import linesep
 
 panelcode_test_string = """
 1
@@ -127,12 +126,10 @@ class BasicTestSuite(unittest.TestCase):
 #        assert True
 
     def test_app_batch_svg(self):
-        test_string = panelcode_test_string
+        test_string = panelcode.pstr_clean(panelcode_test_string) # strip all kinds of bad behavior
 
         ## this function needs to be replaced with pyparser output,
         ## but temporarily cleaning the input in-place during testing
-        test_string = linesep.join([s for s in test_string.splitlines() if s.strip()]) # remove empty lines from string
-        test_string = test_string.replace("()", "") # collapse empty rowgroups
         test_string = test_string.replace("(_)", "0") # replace uncoded page markers as empty pages
         test_string = test_string.replace(";", "\n") # split pages into lines
 
