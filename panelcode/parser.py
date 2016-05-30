@@ -20,51 +20,63 @@ def parse_panelcode (pstr):
     #  BNF
     #  %start panelcode
     #  
-    #  <panelcodeblock>    ...is a text string / file containing one or more, separated by linebreaks:
+    #  <panelcodeblock>    ...a text string / file, with one or more separated by linebreaks:
     #                       <panelcode> | <panelcode> <comment> | <comment> | <blankline>
     #
-    #  <panelcode>         :=  <page> | <pagegroup>
+    #+ <panelcode>         :=  <page> | <pagegroup>
     #  
-    #  <pagegroup>         :=  <page> <pagejoin> <page> | <page> <pagejoin> <pagegroup>
-    #    <pagejoin>        :=  <horizontaljoin> | <verticaljoin>
-    #    <horizontaljoin>  :=  "++";
-    #    <verticaljoin>    :=  ",,";
+    #+ <pagegroup>         :=  <page> <pagejoin> <page> | <page> <pagejoin> <pagegroup>
+    #+   <pagejoin>        :=  <horizontaljoin> | <verticaljoin>
+    #+   <horizontaljoin>  :=  "++";
+    #+   <verticaljoin>    :=  ",,";
     #  
-    #  <page>              :=  <row> | <row> <rowseparator> <row> | <emptypage> | <uncodedpage>
-    #    <rowseparator>    :=  "_";
-    #    <emptypage>       :=  <emptyrow>
-    #    <uncodedpage>     :=  <uncodedrow>
+    #+ <page>              :=  <row> | <row> <rowseparator> <row> | <emptypage> | <uncodedpage>
+    #+   <rowseparator>    :=  "_";
+    #+   <emptypage>       :=  <emptyrow>
+    #+   <uncodedpage>     :=  <uncodedrow>
     #  
-    #  <row>               :=  <numrow> | <grouprow> | <emptyrow> | <uncodedrow>
-    #    <numrow>          :=  <numbers> | <numbers> <rowseparator> <row>
-    #    <emptyrow>        :=  "0"
-    #    <uncodedrow>      :=  <groupopen> "_" <groupclose>
-    #  
-    #  <grouprow>          :=  <groupopen> <grouprowcontents> <groupclose>
+    #+ <grouprow>          :=  <groupopen> <grouprowcontents> <groupclose>
     #  	                    | <decorativenum> <groupopen> <grouprowcontents> <groupclose>
     #    <decorativenum>   :=  <numbers>
-    #    <groupopen>       :=  "("
-    #    <groupclose>      :=  ")"
+    #+   <groupopen>       :=  "("
+    #+   <groupclose>      :=  ")"
     #  
-    #  <grouprowcontents>  :=  <groupunit> | <groupunit> <groupseparator> <groupunit>
-    #    <groupseparator>  :=  <newcol> | <newrow>
-    #      <newcol>        :=  "+"
-    #  	<newrow>        :=  ","
-    #    <groupunit>       :=  <emptyrow> | <numbers> | <numbers> <spanmodifier> | <spanmodifier>
-    #      <spanmodifier>  :=  <rowspan> | <colspan> | <rowspan> <colspan> | <colspan> <rowspan>
+    #+ <grouprowcontents>  :=  <groupunit> | <groupunit> <groupseparator> <groupunit>
+    #+   <groupseparator>  :=  <newcol> | <newrow>
+    #+     <newcol>        :=  "+"
+    #+     <newrow>        :=  ","
+    #+   <groupunit>       :=  <emptyrow> | <numrow> | <numrow> <spanmodifier> | <spanmodifier>
+    #+     <spanmodifier>  :=  <rowspan> | <colspan> | <rowspan> <colspan> | <colspan> <rowspan>
     #        <rowspan>     :=  "r" <numbers>
     #        <colspan>     :=  "c" <numbers>
     #  
+    #+ <row>               :=  <grouprow> | <numrow> | <emptyrow> | <uncodedrow>
+    #+   <emptyrow>        :=  "0"
+    #+   <uncodedrow>      :=  <groupopen> "_" <groupclose>
+    #  
+    #+ <numrow>            :=  <countingnums>
+    #  
     #  <digits>            :=  <digit> | <digit> <digits>
     #  <digit>             :=  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-    #  <numbers>           :=  <number> | <number> <digits>
-    #  <number>            :=  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-    #  <letter>            :=  a | b | c | ... | y | z
+    #  <numbers>           :=  <countingnums> | <countingnums> <digits>
+    #+ <countingnums>      :=  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
-
-    row             = pp.Literal("3()") | pp.Literal("3") |  pp.Literal("0") # placeholder
-    emptyrow        = pp.Literal("0")
+    countingnums    = pp.Regex(r"[1-9]") # or support 10+... pp.Regex(r"[1-9][0-9]*")
+    numrow          = countingnums # pp.Literal("3") # placeholder
+    emptyrow        = pp.Literal("0") # or...?  pp.Literal("E")
     uncodedrow      = pp.Literal("(_)")
+    spanmodifier    = pp.Regex(r"[rc][1-9][0-9]*")
+
+    groupunit       = pp.Group( emptyrow | numrow | numrow + spanmodifier | spanmodifier )
+    newcol          = pp.Literal("+")
+    newrow          = pp.Literal(",")
+    groupseparator  = ( newcol | newrow )
+    grouprowcontents = pp.Group( groupunit + pp.ZeroOrMore( groupseparator + groupunit ) )
+    groupopen       = pp.Literal("(")
+    groupclose      = pp.Literal(")")
+    grouprow        = pp.Group( groupopen + grouprowcontents + groupclose )# pp.Literal("3()") # placeholder
+
+    row             = grouprow | numrow | emptyrow | uncodedrow
     emptypage       = emptyrow
     uncodedpage     = uncodedrow
     rowseparator    = pp.Literal("_")
@@ -72,7 +84,8 @@ def parse_panelcode (pstr):
     horizontaljoin  = pp.Literal(",,")
     verticaljoin    = pp.Literal("++")
     pagejoin        = ( horizontaljoin | verticaljoin )
-    pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ))
+    pageseparator   = pp.Literal(";")
+    pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ) + pp.Optional(pageseparator))
     panelcode       = pp.Group( pp.OneOrMore( pagegroup | page ))
     
     try:
