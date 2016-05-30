@@ -100,6 +100,7 @@ def pstr_to_html (pstr):
     tgroup_end = ')'
     # print '\n----------------------------------------'
     # print '\npstr: ' + pstr
+    pstr = pstr.replace("(_)", "(0)") # temporary hack to pass uncoded page markers as 0-row pages
     tables = [x.strip() for x in pstr.split('_')] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
     rowheight = 'rowheight' # slug for replacing last, since we count rows as we go.
     rowcount = 0

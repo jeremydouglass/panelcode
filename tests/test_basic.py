@@ -9,6 +9,7 @@ import unittest
 
 batchstring = """1
 0
+0_0_0
 0_(2+0+2)_0
 0_1_(0+1)
 0_1_(1+0)
@@ -37,7 +38,9 @@ batchstring = """1
 5(r2+1+r2,1)
 5(r2+2,2)
 5(2+r2,2)
-1"""
+1
+(_)
+"""
 
 batchstring2 = """3x5            # grid shorthand
 	0_1_(0_1)      # zero panels
