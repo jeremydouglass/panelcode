@@ -130,20 +130,32 @@ panelcode_test_string_3 = """3x5            # grid shorthand
 	2_3_2++        # page-compositing
 	2_2++3+3       #"""
 
+def old_preparse(pstr):
+    pstr = pstr.replace("~", "0") # replace uncoded page markers as empty pages
+    pstr = pstr.replace(";", "\n") # split pages into lines
+    return pstr
 
 class BasicTestSuite(unittest.TestCase):
     """Basic test cases."""
 
     def test_app_batch_svg(self):
         test_string = panelcode.pstr_clean(panelcode_test_string) # strip all kinds of bad behavior
-
+        test_string = old_preparse(test_string)
         ## this function needs to be replaced with pyparser output,
         ## but temporarily cleaning the input in-place during testing
-        test_string = test_string.replace("(~)", "0") # replace uncoded page markers as empty pages
-        test_string = test_string.replace(";", "\n") # split pages into lines
 
     	panelcode.app_batch_svg(test_string)
         assert True
+
+    def test_pstr_rowcount(self):
+        self.assertEqual(panelcode.pstr_rowcount('1'), 1)
+        self.assertEqual(panelcode.pstr_rowcount('3'), 1)
+        self.assertEqual(panelcode.pstr_rowcount('3_3'), 2)
+        self.assertEqual(panelcode.pstr_rowcount('1_2_3_4_5'), 5)        
+
+        # self.assertEqual(panelcode.pstr_rowcount('(~)'), 1)        
+        self.assertEqual(panelcode.pstr_rowcount('3,,3'), 1) # should this be 1 row, or 2 rows? or just throw an error if passed a pagegroup?
+        self.assertEqual(panelcode.pstr_rowcount('3++3'), 1)
 
 ###  currently already cascade tested by test_app_batch_svg
 #    def test_app_svg_preview_page(self):
