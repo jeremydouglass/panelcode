@@ -1,6 +1,21 @@
 ## Parsing
 
-## PARSING
+
+-  domain specific languages / mini-languages
+	-  http://stackoverflow.com/questions/1547782/mini-languages-in-python
+	-  https://news.ycombinator.com/item?id=403690
+		- http://weblog.jamisbuck.org/2006/4/20/writing-domain-specific-languages
+		- http://code.activestate.com/recipes/534150/
+	-  https://www.python.org/community/sigs/retired/parser-sig/towards-standard/
+
+-  [PLY (Python Lex-Yacc)](http://www.dabeaz.com/ply/) -- 2015 -- see also list of other tools
+	-  http://www.antlr.org/
+	-  http://simpleparse.sourceforge.net/ -- http://simpleparse.sourceforge.net/simpleparse_grammars.html
+	-  http://pages.cpsc.ucalgary.ca/~aycock/spark/ -- 2009
+	-  http://theory.stanford.edu/~amitp/yapps/
+	-  http://pythonhosted.org/pyrser/quickstart.html
+-  https://github.com/Mappy/PyLR
+-  http://web.archive.org/web/20090225132556/http://www.evanfosmark.com/2009/02/sexy-lexing-with-python/
 
 
 ### EBNF for Panelcode
@@ -89,10 +104,25 @@ BNF NOTES
 -  also
 -  http://www.garshol.priv.no/download/text/bnf.html
 
+...contains mention of BNF, Bison and YACC. 
+
+-  http://stackoverflow.com/questions/14013792/how-to-implement-backus-naur-form-in-python
+-  http://dinosaur.compilertools.net/bison/bison_4.html
+-  https://en.wikipedia.org/wiki/Yacc
+-  https://en.wikipedia.org/wiki/LALR_parser
+-  https://www.quora.com/How-can-I-parse-and-evaluate-a-BNF-using-Flex-Bison
+-  http://www.tldp.org/HOWTO/Lex-YACC-HOWTO.html
+-  http://stackoverflow.com/questions/33645123/bnf-to-flex-bison
+
 
 ### Pyparsing
 
 Pyparsing documentation is a bit all over the place.
+
+Bought this book:
+
+-  file:///Users/jeremydouglass/Downloads/Getting_Started_with_Pyparsing.pdf
+-  http://infohost.nmt.edu/tcc/help/pubs/pyparsing/pyparsing.pdf
 
 1.  [pyparsing quick reference: A Python text processing tool](http://infohost.nmt.edu/tcc/help/pubs/pyparsing/pyparsing.pdf) (John Shipman, 2013) -- collects many links to other information on p3.
 2. The "Getting Started with Pyparsing" ebook, which I purchase from O'Reilly ($10)
@@ -110,7 +140,11 @@ Pyparsing documentation is a bit all over the place.
 6. [pyparsing Documentation](http://pyparsing.wikispaces.com/Documentation) -- although a bit all over the place, some out of date, and hard to navigate
 
 
-### pre-parsing
+-  **** [pyparsing](http://pyparsing.wikispaces.com/)
+	-  **** http://eikke.com/pyparsing-introduction-bnf-to-code/
+
+
+### preparsing
 
 -  `pc_text`: a text block. code lines (may be compound with ;), allows comment lines, end line comments, blank lines. may include shorthand(s).
 -  `pc_tabs`: tab-separated values, containing a header row, a first column of panelcodes with allowed comments, optional additional rows separated by tabs. is also a valid pc_text file. may include shorthand(s).
@@ -162,7 +196,10 @@ Pre-parsing functions convert `pc_text`, `pc_tabs`, `pc_mini` to each other, and
 7. `.canonical`
 	-  need to think about whether or not this is the same as longhand
 
-Group decorators are a key problem. Should I forbid, allow, or require them everywhere, or...?
+
+#### Parsing and syntax
+
+**Group decorators** are a key sytanx problem for (pre-)parsing. Should I forbid, allow, or require them everywhere, or...?
 
 1. shorthand -- forbid / allow / require decorators?
 2. longhand -- forbid / allow / require decorators?
@@ -190,20 +227,28 @@ Decorators are more work to enter, but make a code easier to read for a human. T
 
 `2_(1.r2+1,1)_2`
 
-...and they also mean that panelcodes can be "simplified" by dropping their row groups through a simple string operation -- so `2_3(1+r2,1)` becomes `2_3` with no parsing and counting the group contents -- not true of `2_(1+r2,1)` -> `2_3` or `2_(r2+1+1,2)` -> `2_5`, although it may still not be that hard. Those still don't sort with like, and can't be searched as easily.
+...and they also mean that panelcodes can be "simplified" by dropping their rowgroups through a simple string operation -- so `2_3(1+r2,1)` becomes `2_3` with no parsing and counting the rowgroup contents -- not true of `2_(1+r2,1)` -> `2_3` or `2_(r2+1+1,2)` -> `2_5`, although it may still not be that hard. Those still don't sort with like, and can't be searched as easily.
 
 Finally, decorators create an ambiguity issue with unspaced shorthand. If decorators are optional, then it isn't clear whether the last number before the row is a decorator or a separate row number.
 
 	is it? `23(1+r2,1)2` -> `2_3(1+r2,1)_2`  # 3 rows
 	is it? `23(1+r2,1)2` -> `2_3_(1+r2,1)_2` # 4 rows
 
-One solution is to only make unspaced shorthand available for panelcode that contains no groups markers.
+One solution is to only make unspaced shorthand available for panelcode that contains no rowgroups markers.
 
-	  valid 23 
-	  valid 23++1 
-	  valid 23++1;2;31,,5 
+	  valid 23 = 2_3
+	  valid 23++1 = 2_3++1
+	  valid 23++1;2;31,,5 = 2_3++1;2;3_1,,5 
 	invalid 23(1+r2,1) -- ambiguous 
+	  valid 2_3(1+r2,1) -- 2 rowgroups
+	  valid 2_3_(1+r2,1) -- 3 rowgroups
 
+So, the shorthand expansion rule is something like:
+
+-  if string contains 2 digits next to each other
+-  and does not contain _
+-  and does not contain (
+-  replace <digit> <digit> with <digit> <_> <digit>
 
 Parsing functions take a pc_code.
 
@@ -211,8 +256,6 @@ Parsing functions take a pc_code.
    -  `pc_composition`: multiple pages connected with `++` or `,,` ... `1_2++3_3` ... `1++1++1,,2++2++2,,3++3++3` defines a 3x3 grid of pages
       -  `pc_page`: this is the key render level for svg and index generation.
          -  `pc_rowgroup`: this is the key render level for css and html output.
-
-
 
 
 `pc_block` --> `pc_list`
@@ -295,6 +338,12 @@ Main uses for regex:
    b.  Prism
 
 
+-  python regex -- in particular, the `scanner` -- 2015
+	-  http://lucumr.pocoo.org/2015/11/18/pythons-hidden-re-gems/
+	-  http://www.programcreek.com/python/example/53972/re.Scanner
+	-  https://www.reddit.com/r/Python/comments/3edk1g/rescanner_undocumented_class_perfect_for_a/?
+
+
 #### regex test strings
 
 [panelcode_test_strings](./panelcode-master/test/panelcode_test_strings.txt)
@@ -330,6 +379,9 @@ modifier: gm
 
 #### regexes for syntax highlighting
 
+Create a syntax highlighting (reggex) file for a specification of Panelcode? using some syntax highlighter, e.g. Pygments or Prism etc. etc. Prism supports reggex language definitions.
+
+-  EXAMPLE-BASED VALIDATION OF DOMAIN-SPECIFIC VISAUL LANGUAGES -- ACM Digital Library 2814256
 
 
 ##### Textmate (Ruby) syntax highlighting "language grammars"
@@ -426,3 +478,44 @@ Pygments (Python Syntax Highlighter), on the other hand, is python based and has
 -   http://stackoverflow.com/questions/14755721/extensive-documentation-on-how-to-write-a-lexer-for-pygments
 -   [How to write a Pygments lexer](http://web.archive.org/web/20110504152615/http://www.siafoo.net/article/15)
 -   Sphinx documentation is generated with Pygments... http://www.sphinx-doc.org/en/stable/markup/code.html
+
+
+
+
+
+
+## ----------
+
+## DEV NOTES
+
+-  [html-tokenize](https://github.com/substack/html-tokenize)
+-  [Parse HTML table to Python list?]() 6325216
+-  [Layout with Dijit] for Dojo
+	-  https://dojotoolkit.org/reference-guide/1.10/dijit/layout.html — see the part that says “Conceptually it looks like this:”
+-  [Ask HN: Writing DSL in Python]()
+	-  [pydsltool 0.2.0]()
+	-  slideshare creating-domain-specific-languages-in-python govindaraj
+	-  A DSL in 5 Languages (2010)
+	-  https://pyparsing.wikispaces.com/Publications
+	-  Charming Python: declarative mini-languages
+ASIDE:
+
+-  [Document Layout Analysis]() wikipedia
+-  [OCRopus]() wikipedia — and see OCRopy
+-  [OCRFeeder]() wikipedia
+
+
+### Importing and Translating
+
+Someday:
+
+-  HTML tables to Panelcode ...?
+	-  [Parsing HTML table to Python list](http://stackoverflow.com/questions/6325216/parse-html-table-to-python-list)-- use lxml
+	-  [Simple Python HTML template DSL (improved Python 3 version)](https://gist.github.com/kstep/3516334)
+        -   ...web crawling and giving homepages a panelcode, beautiful soup?
+
+-  TEI...?
+-  Layout segementation, document analysis... OCR?
+
+
+## ----------

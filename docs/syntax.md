@@ -154,7 +154,7 @@ Groups `( )` which contain only simple rows are reduced to simple rows.
 |  group with simple rows (uncod)  |  `1_(2,~)`    |  `1_2_~`   |  ![][1_2_~]    |
 |  group with missing row          |  `1_(2,)`     |  invalid   |                |
 |  group with missing rows         |  `1_(,)`      |  invalid   |                |
-|  group with missing rows         |  `1_(,)`      |  invalid   |                |
+|  group with missing rows         |  `3(,)`       |  invalid   |                |
 
 
 ### Blanks: `0`
@@ -236,6 +236,12 @@ Internally, the `~` panel is represented as `1.uncoded` -- a single panel with s
 
 -  `~_2_~` = `1.buncoded_2_1.uncoded`
 -  `3(r2+~,1)` = `3(r2+1.uncoded,1)`
+
+
+
+If the _ marker wasn't being used, perhaps it could be used for uncoded? Although ~ seems more semantic, and less likely to be mistaken for space. Perhaps the underscore should be used instead of 0 to code for blank. After all, there is 1 panel.
+
+		(~)		(_)		(-)
 
 
 ### Shorthands: `[ ]`
@@ -418,9 +424,9 @@ The multiplier is expanded before all other shorthands are applied.
 > **NOTE:** Low multipliers of simple rows does not enhance readability or save space:
 > `2[*2]` is not shorter or simpler than `2_2`.
 
-
 > **DEV NOTE:** Multiplier shorthand was originally called grid shorthand or "grid code", because a multiplier * a rownum would produce a grid, e.g. 3*5 = 3x5 grid. However, the main use of the multiplier is actually in duplicating complex rowgroups -- which do not in fact produce grids.
 
+> **Idea:** Could be `[,3]` `[+3]` `[_3]` -- repetition syntax makes more sense than multipler, and it could repeat across a row (`+`) or it could repeat rows (`_` / `,`). This notation might make more sense if the row separator in groups and out of groups is the same (e.g. `,`). (`+`) would be very rare -- after all, `3` is already the shorthand for `1[+3]`, and "+3" might be confusing -- that is, it might look like 4. Need to think more about this.
 
 #### Mixing shorthands
 
@@ -568,3 +574,731 @@ shorthand --> full
 `3(r2+1,1)`
 
 canonical_form()
+
+
+
+
+
+
+
+## ----------
+
+## DEV NOTES
+
+
+#### safe characters
+
+-  http://superuser.com/questions/358855/what-characters-are-safe-in-cross-platform-file-names-for-linux-windows-and-os
+-  http://www.mtu.edu/umc/services/web/cms/characters-avoid/
+-  https://support.apple.com/en-us/HT202808
+
+
+#### DEV Idea: nesting and more pythonic syntax
+
+1. What if , worked the same inside and outside groups? ( `_` --> `,` )
+2. What if , and + worked the same inside and outside groups?
+3. What if the () worked to different levels of nesting?
+4. What if parts of the syntax partially mirrored the python () [] {} in some (intuative / data structure) way?
+
+-  http://stackoverflow.com/questions/22391419/what-is-the-difference-between-curly-brace-and-square-bracket-in-python
+-  https://docs.python.org/3.3/tutorial/datastructures.html
+-  https://docs.python.org/3/library/stdtypes.html#tuple
+-  might be interesting to see how python implements a Markdown processor...
+   -  https://pypi.python.org/pypi/Markdown
+   -  http://daringfireball.net/projects/markdown/
+
+(,) tuples
+
+### DEV Groups: `()`
+
+```xml
+<layout>
+  <panelgroup>
+    <panel /><panel /><panel />
+  </panelgroup>
+  <panelgroup>
+    <panel /><panel />
+  </panelgroup>
+  <panelgroup>
+    <panel /><panel /><panel />
+  </panelgroup>
+</layout>
+```
+
+Conceptually colspans and rowspans are designed to work much like CSS `display:table` or HTML `<table>`. 
+However note that column constraints to not hold across outside a row or rowgroup. For example:
+
+```Panelcode
+	3_2
+```
+
+...renders with each row full-width, whereas an html table does not:
+
+```html
+	<table>
+		<tr><td></td><td></td><td></td><tr>
+		<tr><td></td><td></td><tr>
+	</table>
+```
+
+<table>
+  <tr><td></td><td></td><td></td><tr>
+  <tr><td></td><td></td><tr>
+</table>
+
+> `panelcode.html_table("1_3")`
+
+
+
+```Panelcode
+	233(1+r2,1)
+	2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)
+```
+
+
+### DEV Insets: `.i( )`
+
+**INSETS are currently not supported in Panelcode, but the specification is under development.**
+
+Insets are panels included within other panels.
+
+They indicated on a rownum with the property `.i`. 
+
+|  shorthand |  shorthand   |  shorthand   |  shorthand   |  description                  |  Panelcode   |  render     |
+|------------|--------------|--------------|--------------|-------------------------------|--------------|-------------|
+|  `1`       |  `1`         |  `1`         |  `1`         |  no insets                    |  `1`         |  ![][1]     |
+|  `1.i1`    |  `1.i(1)`    |  `1.(1)`     |  `1.1`       |  1 inset                      |  `1.i1`      |  ![][1.i1]  |
+|  `1.i2`    |  `1.i(2)`    |  `1.(2)`     |  `1.2`       |  2 insets                     |  `1.i2`      |  ![][1.i2]  |
+|  `3.i1`    |  `3.i(1)`    |  `3.(1)`     |  `3.1`       |  1 inset each in 3-panel row  |  `3.i1`      |  ![][3.i1]  |
+|  `3.i2`    |  `3.i(2)`    |  `3.(2)`     |  `3.2`       |  2 insets each in 3-panel row |  `3.i2`      |  ![][3.i2]  |
+
+The rownum is generally `1`, but insets may be set on all panels in a row. `3.i1` expands to `(1.i1 + 1.i1 + 1.i1)`. This is because the inset is specified for each of the 3 panels in the row. Another way of saying this is that, like multiplication, the inset property is distributive (like all Panelcode properties).
+
+Insets may be either a single panel or a simple row according to their count (`.i1`, `.i2`, `.i3` etc.).
+
+**INSET NESTING INSET GROUPS are currently not supported in Panelcode, but the specification is under development.**
+
+One proposed method is to allow inset of a layout -- a row, group, or series of rows and groups. Panelcode rendering would be recursive.
+
+Nested panels can be specified as a row or panel group.
+
+```Panelcode
+	1
+        1.i3(r2+1,1)
+	1.i(r2+1,1)
+	3                    # no insets
+	3(1+1.i1+1)          # 1 inset in center panel
+	3(1+1.i3+1)          # 3 insets in center panel
+	3(1+1.i3(r2+1,1)+1)  # 3 inset rowgroup in center panel
+	3(1+1.i(0+0+1)+1)    # insets rowgroup in center panel
+	3.i                  # shorthand = 3(1i1+1i1+1i1)
+	3.i2                 # shorthand = 3(1i2+1i2+1i2)
+```	
+	
+So, four nested panels:
+
+	1.i1.i1.i1
+
+```Panelcode
+	3_1i1_3
+	3_1i2_3
+	3_1i()_3
+	3_1i2_(1,1i
+	3_1
+	3(1+1i(2))3
+```
+
+.i2
+.i3
+
+.i(1+r2,1)
+
+-  insets -- row num insets (`1_1.i`)
+-  insets -- row num multi-insets (`1_1.i3`)
+-  insets -- group insets (`1_3(r2+1.i,1`)
+-  insets -- group multi-insets (`1_3(r2+1.i3,1`)
+-  ? insets -- row num inset groups (`1_1.i(r2+1,1)`)
+-  ? insets -- group inset groups (`1_3(r2+1.i(r2+1,1),1`)
+
+Alternately, the group operator is already for nesting -- so rather than requiring that the top level for groups be the empty page, allow groups to be attached to panels as a property with `.i` or even just `.`:
+
+	1.(3_1.(2_2))
+
+-  `1` panel, with
+   -  `.(` an inset layout containing
+      -  `3` panels in a row, `_` and
+      -  `1` panel, with
+         -  `.(` an inset layout containing
+             -   `2_2` a 2x2 grid
+         -  `.)`
+   -  `.)`
+
+
+#####  DEV inset shorthand
+
+Often it would be nice to keep a row simple (e.g. `3`) and just specify which member panel contains an inset.
+
+```Panelcode
+	3.i    # = 3(1i1+1i1+1i1) insets on all row panels
+	3.i.1  # = 3(1i1+1+1) inset on panel #1 
+	3.i.2  # = 3(1+1i1+1) inset on panel #1
+	3.i.3  # = 3(1+1+1i1) inset on panel #1
+	...
+	5.i.2(r2+2,2) # = 5(r2+1i1+1,2) inset added to the second panel of a group. Notice necessary expansion of r2+2 to specify inset.
+```
+
+
+##### DEV inset alignment?
+
+Inset alignment information is currently outside the scope of panelcode -- insets are displayed either centered or along the bottom of the panel frame.
+
+Inset alignment? Default should be centered, but that is probably rare. Might be interesting to give an inset gravity within a frame -- NSWE, or NE SW etc. Or use something more like what W3c or Imagemagick use for alignment values.
+
+```Panelcode
+	1i.n    # = inset North
+	1i.s   # = inset SW
+	3i.3sw # = ..combine panel num and alignment South, West?
+
+```
+
+
+### DEV layout compositing
+
+Given two panelcodes, `333` and `2_(r2+2,2)`, each representing a page:
+
+-  `++` = connected page (horizontally, e.g. comic book)
+-  `,,` = connected page (vertically, e.g. webtoon)
+-   `;` = new page or pagespread
+
+|  Panelcode            |  description            |
+| ----------------------|-------------------------|
+|  3_3_3++2_2_5(r2+2,2) |  left-right pages       |
+|  3_3_3,,2_(r2+2,2)    |  top-bottom pages       |
+|  3_3_3++              |  left-right 2pg spread  |
+|  3_3_3,,              |  top-bottom 2pg spread  |
+
+![][3_3_3]
+![][2_2_5(r2+2,2)]
+
+A fold-out book or accordian book might encode a series of several pages as one spread.
+
+|  Panelcode         |  description                     |
+| -------------------|----------------------------------|
+|  `212++431`        |  left-right facing 2pgs          |
+|  `1,,`             |  a single horizontal centerfold  |
+|  `12++43++11++32`  |  fold-out "gateway" 4 pages      |
+
+The main purpose of layout compositing is to distinguish 2pg spreads from single pages. This aids in rendering facing page pairs -- for formats in which this kind of analysis sense (e.g. print formats such as comic books, graphic novels, etc.). However it could support other things.
+
+12 pages from Promethea, re-arranged as a poster (not real code):
+
+```Panelcode
+	(32++23++14++32),,(44++12++12++32),,(21++41++31++11),,(1++51++222++1)
+	# not real code
+```
+
+```Panelcode
+	((~)++(~)++(~)++(~)),,((~)++(~)++(~)++(~)),,((~)++(~)++(~)++(~)),,((~)++(~)++(~)++(~))
+	# not real code
+```
+
+
+> Poster zones and sections from Meanwhile?
+
+The first ten page-spreads of Scott Pilgrim:
+
+```Panelcode
+	1++
+	1222++2221
+	121++12
+	1++
+	112++2111
+	122++131
+	221++311
+	414++
+	2111++112
+	1221++1222
+```
+
+#### DEV layout compositing example -- gatefold covers in comics
+
+-  [Example of gatefold cover shown in video](https://youtu.be/h5rSAqJsDf0?t=502) -- the front cover has an extra flap folded inside the first page, which reveals a double-wide front cover. I've also seen images of double-gatefold in which the front and back cover form a diptic, and double gatefold makes it quad wide. 
+
+See also: "[spread](https://en.wikipedia.org/wiki/Glossary_of_comics_terminology#Spread)" leading to "[gatefold](https://en.wikipedia.org/wiki/Gatefold)"
+
+Tinsley has diagrams and explanations of how "wrap around covers" and "gatefold covers" are prepared and folded. (Tinsley, Kevin. _[Digital Prepress for Comic Books]()_. 2009. p33.)
+
+However, compare Chris Ware!
+
+
+#### DEV layout compositing ideas
+
+1_1
+2_2
+4_4
+
+I want to arrange these in a square, with 1_1 double-wide.
+
+If this were a single page, it would be defined like this:
+
+```Panelcode
+	1_1_(r2+r2+4,4,r2+r2+4,4)
+```
+
+If I wanted 1_1 double-tall on the left as a single page, it would look very different.
+
+alternately, through a compositing. What if we added a different brace/bracket for "page" to aid clarity? Although it could hurt URL / filename portability.
+
+Then use c and r spans in exactly the same way in the composite as in a rowgroup:
+
+[1_1]c2,,[2_2]++[4_4]
+[1_1]c2,[2_2]+[4_4]
+[1,1]c2,[2,2]+[4,4]
+[11]c2,[22]+[44]
+
+...which means that a two page spread is just:
+
+[1_2_3]c2
+
+This might be better than `1_2_3++` or ``[1_2_3]++`` as it scales beyond 2-pages, and allows complex constructions of the same kind as rowgroups. So, the Promethea 12pg spread:
+
+`[1]+[1]+[1],[1]+[1]+[1],[1]+[1]+[1],[1]+[1]+[1]`
+
+
+and a gatefold cover:
+
+`[1]c3`
+
+Could even add several types:
+
+	() = rowgroup
+	[] = page
+	{} = composite
+
+...to make it explicit -- although I'm not sure that anything needs to be outside the composite, so maybe unnecc.
+
+On the other hand, you could nest arbitrarily deep if you just use '()' for everything.
+
+So instead of:
+
+	{[3_3]+[1_2_3],[3_(r2+1,1)]r2}
+
+It would just be:
+
+	((3_3)+(1_2_3),(3_(r2+1,1))r2)
+	
+or for that matter, making underscores into +:
+
+	((3+3)+(1+2+3),(3+(r2+1,1))r2)
+
+This last seems extremely hard to read.
+
+But compared to the two-page spread or n-page spread I'm not sure I want to do the dynamic logic on discovering what is a composite, page, rowgroup etc. as this will matter a lot for rendering. It seems much more important for a class of approaches to data that isn't comics. So, maybe for another day.
+
+Right now, the two most common constructions would almost certainly be:
+
+	1_2_3++2_2		# facing pages considered as a single layout
+	1_2_3+2_2			#  ...alternate syntax?
+	[1_2_3]+[2_2]		#  ...alternate syntax?
+
+	1_2_3++			# a two-page spread
+	1_2_3+				#  ...alternate syntax?
+	[1_2_3]+			#  ...alternate syntax?
+	[1_2_3]c2			#  ...alternate syntax?
+	1_2_3c2			#  ...alternate syntax?
+
+The argument for c2 is that it is consistant with rowgroups and more flexible. However, because of the way it visually appears to attach to the '3' it makes the braces seem necessary.
+
+
+#### DEV layout compositing NEW THOUGHTS
+
+	(3(~),3,3(1.r2+1,1.uncoded),3).c2
+	((1+r2,1)).c2
+	(1+r2,1).c2
+	1+1.r2,1..c2     # or double-dot to avoid wrapping the thing in ()
+
+	can contain, nesting:	1 , 1+1 , 1.r2 , .r2 , r2 , 1() , (), ~, 0, ..c2
+
+...so if 
+
+	(etc...).c2	# e.g. two-page wide layout
+	(~)		# (~).c2	
+	(0)		# (0).c2
+	()+()		# combined page spread
+	
+	
+	(3)		# nice property of being python data structure syntax
+	(3,3)
+	(3,3+3)			# = (3,6)	
+	(3,3+(1.r2+1,1))	# 3+ works? What does it mean...?
+
+
+
+### DEV Series
+
+A series of panelcodes may be written in a minified 
+A Panelcode file consists panelcode strings separated by either line breaks (one per line) or semicolons (or mixed). Panelcode lines may include comments:
+
+
+What about page numbers? CSV? Part and section structure?
+
+```Panelcode
+	## Chapter 1: Asleep
+	
+	1.	333
+	2.	2253
+	...
+	
+	## Chapter 2: Down
+	
+	#### Ch2. Part 1: Curiouser
+	
+	1. 
+	2. 
+	...
+	
+	#### Ch2. Part 2: Among the Mad
+	...
+```
+
+
+#### DEV layout compositing and minification
+
+A simple minified string of multiple panelcodes is semi-colon separated:
+
+```Panelcode
+	333;131;1;331;323;213;1
+```
+
+Here are all of the layouts of Scott Pilgrim vol.1 (160 pages), minified into a single Panelcode string:
+
+> 1++;; 1222;2221;; 121;12;; 1++;; 112;2111;; 122;131;; 221;311;; 414++;; 2111;112;; 1221;1222;; 2222;2222;; 2221;12;; 1212;1221;; 12;11(3C);; 221;1222;; 1(3C);11;; 010;1111;; 1111;111;; 211;2211;; 211;11;; 121;221;; 010;1111;; 111;1222;; 21(3C);1212;; (3C)++;; 122;(3C)11;; (2r+3r,2r,3r,2r)12;212;; (3C)12;122;; 321;2222;; 22(4E);212;; (3C)12;232;; 323;23(3C);; 111;12;; 1(3C);122;; 212;22(3C);; 1111;1111;; _3C++;; 21(3C);221;; 1221;222;; 22(3C);1;; 121;122;; 221;(3C)11;; 322;122;; 1++;; 222;112;; 222;12;; (3C)++;; 12;111;; 111;221;; 112;121;; 121;121;; 111;122;; 222;11;; 1(3D);22(3C);; 122;312;; 122++;; 222;211;; 1(3C);22111;; 12;121;; 1221;1111;; 12(3C);112;; 1++;; 1122;112;; 1212;1111;; (c2+r4,c2,2,1)++;; 111;111;; (3r2+1,1)++;; 12;1(3C);; 12;111;; 311;121;; 11;11;; 1++;; 11++;; 1(3C)++;; 11++;; 1++;; 113;111;; 122;12;; 212;232;; 222;112;; (1+r3,1,1)++;; 
+
+Here they are with no layout compositing information, just serialization:
+
+> 1;; 1222;2221;; 121;12;; 1;; 112;2111;; 122;131;; 221;311;; 414;; 2111;112;; 1221;1222;; 2222;2222;; 2221;12;; 1212;1221;; 12;11(3C);; 221;1222;; 1(3C);11;; 010;1111;; 1111;111;; 211;2211;; 211;11;; 121;221;; 010;1111;; 111;1222;; 21(3C);1212;; (3C);; 122;(3C)11;; (2r+3r,2r,3r,2r)12;212;; (3C)12;122;; 321;2222;; 22(4E);212;; (3C)12;232;; 323;23(3C);; 111;12;; 1(3C);122;; 212;22(3C);; 1111;1111;; _3C;; 21(3C);221;; 1221;222;; 22(3C);1;; 121;122;; 221;(3C)11;; 322;122;; 1;; 222;112;; 222;12;; (3C);; 12;111;; 111;221;; 112;121;; 121;121;; 111;122;; 222;11;; 1(3D);22(3C);; 122;312;; 122;; 222;211;; 1(3C);22111;; 12;121;; 1221;1111;; 12(3C);112;; 1;; 1122;112;; 1212;1111;; (c2+r4,c2,2,1);; 111;111;; (3r2+1,1);; 12;1(3C);; 12;111;; 311;121;; 11;11;; 1;; 11;; 1(3C);; 11;; 1;; 113;111;; 122;12;; 212;232;; 222;112;; (1+r3,1,1);; 
+
+
+#### DEV serialization example -- converting binary grids and branching comics
+
+
+Binary grid comics: converting
+
+
+Data grid for panels in ["Choose Your Own Carl"](http://scottmccloud.com/1-webcomics/carl/3b/cyoc.html):
+
+```
+ 1 1 1 1 1 0 1 0 0 0 1 0 1 0 1 0
+ 1 0 1 0 0 0 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0
+ 1 0 1 0 1 0 1 0 1 0 1 0 0 0 1 0
+ 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 0 0 0 0 1 0 1 0 1 0 1 0 0 0 1 0
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 0 0 1 0 1 0 0 1 0 0 1 1 0 1 0 0
+ 1 1 1 1 1 1 1 1 1 0 1 0 0 1 0 1
+ 0 1 0 0 1 0 0 1 0 0 1 1 1 1 1 1
+ 1 1 1 1 1 0 1 1 0 0 1 0 0 1 0 1
+ 0 1 0 0 1 0 0 1 0 1 1 1 1 1 1 1
+```
+
+
+Converting each row into a valid panelcode:
+
+```Panelcode
+(1+1+1+1+1+0+1+0+0+0+1+0+1+0+1+0)
+(1+0+1+0+0+0+1+1+1+1+1+1+1+1+1+1)
+(1+1+1+1+1+0+1+0+1+0+1+0+1+0+1+0)
+(1+0+1+0+1+0+1+0+1+0+1+0+0+0+1+0)
+(1+0+1+1+1+1+1+1+1+1+1+1+1+1+1+1)
+(0+0+0+0+1+0+1+0+1+0+1+0+0+0+1+0)
+(1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1)
+(0+0+1+0+1+0+0+1+0+0+1+1+0+1+0+0)
+(1+1+1+1+1+1+1+1+1+0+1+0+0+1+0+1)
+(0+1+0+0+1+0+0+1+0+0+1+1+1+1+1+1)
+(1+1+1+1+1+0+1+1+0+0+1+0+0+1+0+1)
+(0+1+0+0+1+0+0+1+0+1+1+1+1+1+1+1)
+```
+
+Joining them with underscores and optionally compressing 1+1's into counts. Note that 0+0s must stay separate.
+
+> (5+0+1+0+0+0+1+0+1+0+1+0)_(1+0+1+0+0+0+10)_(5+0+1+0+1+0+1+0+1+0+1+0)_(1+0+1+0+1+0+1+0+1+0+1+0+0+0+1+0)_(1+0+14)_(0+0+0+0+1+0+1+0+1+0+1+0+0+0+1+0)_(16)_(0+0+1+0+1+0+0+1+0+0+2+0+1+0+0)_(9+0+1+0+0+1+0+1)_(0+1+0+0+1+0+0+1+0+0+6)_(5+0+2+0+0+1+0+0+1+0+1)_(0+1+0+0+1+0+0+1+0+7)
+
+
+
+### DEV Shorthands
+
+
+#### DEV Quick code
+
+Serialization (`;`) and compositing (`++`, `,,`) may be combined quick syntax strings -- or may combine a mix of quick syntax strings and other panelcode.
+
+The simple syntax detector will assume that a panelcode string is written in simple syntax if it:
+
+  1. contains 2 or more contiguous digits
+  2. does not contain row separators `_`, groups `()`, or shortcodes `[]`
+
+Note however that row separators `_` are required for any layout referring to a two-digit number greater than 9. 
+
+```Panelcode
+	1212     # = 1 + 2 + 1 + 2
+	12_12    # = 12 + 12
+	1_2_12   # = 1 + 2 + 12
+```
+
+If used, row separators must be used throughout a Panelcode line -- they cannot be mixed.
+
+```Panelcode
+	12112_12   # = 12112 + 12 !!
+	           # ...NOT 1 + 2 + 1 + 1 + 2 + 12
+```
+
+![][2_2_2_1_1_2_1]
+![][3_3_3_3_3]
+
+Limitations of quick syntax:
+
+-  no row counts > 9, e.g. `1212` = `1_2_1_2`; for 12s, write `12_12`.
+-  pages with a single row count > 9 must be escaped in a group.
+   -  `12`   --> `1_2` ** I"M CONCERNED ABOUT THIS **
+   -  `12_`  --> `(12)` ** MAYBE?
+   -  `12()` --> `(12)` ** MAYBE?
+   -  `(12)` --> `(12)` ** MAYBE? For single rows with 2-digit panel counts, use a group.
+
+
+> ... NO: 233(1+r2,1)
+
+
+#### DEV Vertical shorthand
+
+
+Notice that verticode can capture everything that alphacode can -- it is less concise, but more flexible.
+
+|  rowcode        |  image                |  alpha  |  verticode |  short   |
+|-----------------|-----------------------|---------|------------|----------|
+|  `3(r2+1,1)`    |  ![3C][3(r2+1,1)]     |  (C)    |  (v12)     |  (3C)    |
+|  `3(1+r2,1)`    |  ![3D][3(1+r2,1)]     |  (D)    |  (v21)     |  (3D)    |
+|  `4(r3+1,1,1)`  |  ![4E][4(r3+1,1,1)]   |  (E)    |  (v13)     |  4E / 4C |
+|  `4(1+r3,1,1)`  |  ![4D][4(1+r3,1,1)]   |  (B)    |  (v31)     |  4D      |
+|  `5(1+r2+1,2)`  |  ![5I][5(1+r2+1,2)]   |  (I)    |  (v212)    |  5I      |
+|  `5(r2+1+r2,1)` |  ![5H][5(r2+1+r2,1)]  |  (O)    |  (v121)    |  5H      |
+|  `5(r2+2,2)`    |  ![5C][5(r2+2,2)]     |         |  (v122)    |  5C      |
+|  `5(2+r2,2)`    |  ![5C][5(2+r2,2)]     |         |  (v221)    |  5D      |
+
+A strange issue -- verticode does not (or does it? sometimes?) specify in "reading order" -- so needs to be converted into panel code for panel ids -- se for example (v124)
+
+
+
+**Note**: Generated verticode gets tricky e.g. mismatched rows requires lowest common multiple to be expressed. So, for example, `[5432V]` requires 60 rows to create the correct vertical divisions.
+
+1. `[5432V]`
+2. compute the lowest common multiple for the set (lcmm): 60
+3. compute unit scaling factor for each column:
+   -  5 scale = 60/5 = 12r
+   -  4 scale = 60/4 = 15r
+   -  3 scale = 60/3 = 20r
+   -  2 scale = 60/2 = 30r
+4. generate verticode in terms of scales
+
+Here are were row declarations would be made in an HTML table statement:
+
+|     | 5        | 4        | 3        | 2        |
+|-----|----------|----------|----------|----------|
+| 0.  | 1.12r    | 1.15r    | 1.20r    | 1.30r    |
+| 1.  | -------- | -------- | -------- | -------- |  
+| 2.  | -------- | -------- | -------- | -------- |  
+| 3.  | -------- | -------- | -------- | -------- |  
+| 4.  | -------- | -------- | -------- | -------- |  
+| 5.  | -------- | -------- | -------- | -------- |  
+| 6.  | -------- | -------- | -------- | -------- |  
+| 7.  | -------- | -------- | -------- | -------- |  
+| 8.  | -------- | -------- | -------- | -------- |  
+| 9.  | -------- | -------- | -------- | -------- |  
+| 10. | -------- | -------- | -------- | -------- |  
+| 11. | -------- | -------- | -------- | -------- |  
+| 12. | 1.12r    | -------- | -------- | -------- |  
+| 13. | -------- | -------- | -------- | -------- |  
+| 14. | -------- | -------- | -------- | -------- |  
+| 15. | -------- | 1.15r    | -------- | -------- |  
+| 16. | -------- | -------- | -------- | -------- |  
+| 17. | -------- | -------- | -------- | -------- |  
+| 18. | -------- | -------- | -------- | -------- |  
+| 19. | -------- | -------- | -------- | -------- |  
+| 20. | -------- | -------- | 1.20r    | -------- |  
+| 21. | -------- | -------- | -------- | -------- |  
+| 22. | -------- | -------- | -------- | -------- |  
+| 23. | -------- | -------- | -------- | -------- |  
+| 24. | 1.12r    | -------- | -------- | -------- |  
+| 25. | -------- | -------- | -------- | -------- |  
+| 26. | -------- | -------- | -------- | -------- |  
+| 27. | -------- | -------- | -------- | -------- |  
+| 28. | -------- | -------- | -------- | -------- |  
+| 29. | -------- | -------- | -------- | -------- |  
+| 30. | -------- | 1.15r    | -------- | 1.30r    |  
+| 31. | -------- | -------- | -------- | -------- |  
+| 32. | -------- | -------- | -------- | -------- |  
+| 33. | -------- | -------- | -------- | -------- |  
+| 34. | -------- | -------- | -------- | -------- |  
+| 35. | -------- | -------- | -------- | -------- |  
+| 36. | 1.12r    | -------- | -------- | -------- |  
+| 37. | -------- | -------- | -------- | -------- |  
+| 38. | -------- | -------- | -------- | -------- |  
+| 39. | -------- | -------- | -------- | -------- |  
+| 40. | -------- | -------- | 1.15r    | -------- |  
+| 41. | -------- | -------- | -------- | -------- |  
+| 42. | -------- | -------- | -------- | -------- |  
+| 43. | -------- | -------- | -------- | -------- |  
+| 44. | -------- | -------- | -------- | -------- |  
+| 45. | -------- | 1.15r    | -------- | -------- |  
+| 46. | -------- | -------- | -------- | -------- |  
+| 47. | -------- | -------- | -------- | -------- |  
+| 48. | 1.12r    | -------- | -------- | -------- |  
+| 49. | -------- | -------- | -------- | -------- |  
+| 50. | -------- | -------- | -------- | -------- |  
+| 51. | -------- | -------- | -------- | -------- |  
+| 52. | -------- | -------- | -------- | -------- |  
+| 53. | -------- | -------- | -------- | -------- |  
+| 54. | -------- | -------- | -------- | -------- |  
+| 55. | -------- | -------- | -------- | -------- |  
+| 56. | -------- | -------- | -------- | -------- |  
+| 57. | -------- | -------- | -------- | -------- |  
+| 58. | -------- | -------- | -------- | -------- |  
+| 59. | -------- | -------- | -------- | -------- |  
+
+And here are those row declarations in rowcode: 
+
+(12r + 15r + 20r + 30r,,,,,,,,,,,12r,,15r,,,,20r,,,12r,,,,,15r + 30r,,,,,12r,,,15r,,,,15r,,12r,,,,,,,,,,,)
+
+...or, in vertical shorthand:
+
+`[5432V]`
+
+Note that in rendering vertical codes all row paddings etc. *have* to be 0 in rendering if groups that are only 5 rows talls are, in practice, rendering 60 rows.
+
+
+
+A complete solution to computing the lowest common multiple (lcm) for sets of numbers greater than 2 (lcmm), in python and using reduce, appears here:
+
+```python
+# http://stackoverflow.com/questions/147515/least-common-multiple-for-3-or-more-numbers
+
+def gcd(a, b):
+    """Return greatest common divisor using Euclid's Algorithm."""
+    while b:      
+        a, b = b, a % b
+    return a
+
+def lcm(a, b):
+    """Return lowest common multiple."""
+    return a * b // gcd(a, b)
+
+def lcmm(*args):
+    """Return lcm of args."""   
+    return reduce(lcm, args)
+```
+
+> The other way to find the lowest common multiple is to list the prime factors for each number. Remove the prime factors both numbers have in common. Multiply one of the numbers by the remaining prime factors of the other number. The result will be the lowest common multiple.
+>
+> **Example:**  
+> What is the lowest common multiple of 25 and 30?
+> -  The prime factors of 25 are 5 x 5.
+> -  The prime factors of 30 are 2 x 3 x 5.
+> -  Remove the 5 that 25 and 30 have in common as a prime factor.
+> -  Multiply 25 by the remaining prime factors of 30.
+> -  25 x 2 x 3 = 150.
+>
+> The lowest common multiple of 25 and 30 is 150.  
+> http://www.factmonster.com/ipka/A0933352.html
+
+
+
+
+#### DEV Extending Shorthands
+
+
+##### DEV Example: a grid shorthand
+
+**Note**: Grids can already be concisely represented with the multiplier, e.g. `2[*2]`. This is an example of developing a shorthand extension.
+
+|  shorthand  |  short   |  full          |  rowcode             |  render                   |
+|-------------|----------|----------------|----------------------|---------------------------|
+|  grid       |  `[2x2]` |  `[2x2].grid`  |  `2_2`               |  ![][2_2]                 |
+|  grid       |  `[3x4]` |  `[3x4].grid`  |  `3_3_3_3`           |  ![][3_3_3_3]             |
+|  grid       |  `[6x9]` |  `[6x9].grid`  |  `6_6_6_6_6_6_6_6_6` |  ![][6_6_6_6_6_6_6_6_6]   |
+
+>  (see for example swimming page from Concrete)
+
+The possible grid codes are essentially multiplication tables.
+
+	1x1  1x2  1x3  1x4  ...
+	2x1  2x2  2x3  2x4  ...
+	3x1  3x2  3x3  3x4  ...
+	4x1  4x2  4x3  4x4  ...
+	...  ...  ...  ...  ...
+
+If we support up to `[4x4]` there 16 codes (4^2); up to `[9x9]` there are 81 codes (9^2). Because there is no such thing as `[1x2x3]`, and because this isn't combinatoric, and because it is highly unlikely we will be getting grids 10x10 and higher, we could choose to simply write a lookup table which matches a code and replaces it.
+
+	1x1	
+	1x2
+	1x3
+	...
+	9x8
+	9x9
+
+Of course, it is more elegant to write a generator. In Python this is incredibly easy -- we take the first part as a string, and the second an integer, and then multiply the string by the integer:
+
+```python
+# [python code here]
+```
+
+Here are some tests for our grid shorthand
+
+```python
+	shorthand_grid.validate():
+	  # [2x3] --> True
+	  # [2_3] --> False
+	  # [2+3r] --> False
+	  # [2+3] --> False
+	
+	shorthand_grid.to_rows(): 
+	  # [3x4] --> 3_3_3_3
+	  # [2x3]_1_[4x2] --> 2_2_2_1_4_4
+	  # [2x3x4] --> Error: more than two grid terms.
+	  # [x3_4] --> Error: grid without width.
+	  # [4_x3] --> Error: grid without width.
+	  # [3x_4] --> Error: grid without height.
+	  # [4_3x] --> Error: grid without height.
+	
+	shorthand_grid.to_group(): # ...?
+	  # [3x4] --> 3(3)_3(3)_3(3)_3(3)
+	
+	zshorthand_grid.to_expanded(): # ...?
+	  # 3x4 --> 3(1+1+1)_3(1+1+1)_3(1+1+1)_3(1+1+1)
+```
+
+Potential Questions re:grid shorthand groups:
+
+-  What number / percentage of the pages in x...
+   -  ...contain a grid?
+   -  ...contain a perfect grid (2x2,3x3,4x4...)
+-  Which page in x...
+   -  ...contains the largest dimensioned grid?
+   -  ...contains the largest number of separate grids?
+-  Which projects...
+   -  ...contain the fewest grids, or no grids?
+   -  ...contain the most grids, or only grids?
+
+
+### DEV RTL encoding
+
+Already have sections on RTL in rendering, but it might be important to point out here:
+
+-  Reading order and encoding order
+-  Encoding manga in Japanese reading order
+
+We can use the syntax (prefix or suffix) to indicate what reading order is encoded. This could matter for queries across collections that contain both. Or just a header for the whole file!
+
+
+## ----------
+
+
