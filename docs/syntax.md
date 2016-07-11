@@ -921,17 +921,32 @@ The argument for c2 is that it is consistant with rowgroups and more flexible. H
 
 ...so if 
 
-	(etc...).c2	# e.g. two-page wide layout
+	(1,2,3)..c2	# two-page wide layout
 	(~)		# (~).c2	
 	(0)		# (0).c2
-	()+()		# combined page spread
+	()++()		# combined page spread
+	(),,()		# combined page spread
+	();();();	# minified page series
 	
 	
 	(3)		# nice property of being python data structure syntax
 	(3,3)
 	(3,3+3)			# = (3,6)	
 	(3,3+(1.r2+1,1))	# 3+ works? What does it mean...?
+	(1,2)++(1,3)..c2	# what happens here? does c2 refer to the second layout only, or both?
+	((1,2)++(1,3))..c2	# ...better? death by parens?
+	(((3)))			# legal, or no? different?
+	(3,2+(3,2+(3)))		# deep nesting? which is the top level?
 
+	**later** add  page-compositing operators  ++  ,,  ..  ;
+
+	(1,2,3) = (1,1+1,1+1+1)
+	  [1, 1+1, 1+1+1]
+	  [[1], [1,1], [1,1,1]]
+	
+	search [1,2,3]
+	search [1,2,3.r2]
+	searchany [1,2,3] = [1.?,2.?,3.?]
 
 
 ### DEV Series
@@ -953,8 +968,8 @@ What about page numbers? CSV? Part and section structure?
 	
 	#### Ch2. Part 1: Curiouser
 	
-	1. 
-	2. 
+	1.	123
+	2.	11
 	...
 	
 	#### Ch2. Part 2: Among the Mad
@@ -1105,64 +1120,64 @@ Here are were row declarations would be made in an HTML table statement:
 |     | 5        | 4        | 3        | 2        |
 |-----|----------|----------|----------|----------|
 | 0.  | 1.12r    | 1.15r    | 1.20r    | 1.30r    |
-| 1.  | -------- | -------- | -------- | -------- |  
-| 2.  | -------- | -------- | -------- | -------- |  
-| 3.  | -------- | -------- | -------- | -------- |  
-| 4.  | -------- | -------- | -------- | -------- |  
-| 5.  | -------- | -------- | -------- | -------- |  
-| 6.  | -------- | -------- | -------- | -------- |  
-| 7.  | -------- | -------- | -------- | -------- |  
-| 8.  | -------- | -------- | -------- | -------- |  
-| 9.  | -------- | -------- | -------- | -------- |  
-| 10. | -------- | -------- | -------- | -------- |  
-| 11. | -------- | -------- | -------- | -------- |  
-| 12. | 1.12r    | -------- | -------- | -------- |  
-| 13. | -------- | -------- | -------- | -------- |  
-| 14. | -------- | -------- | -------- | -------- |  
-| 15. | -------- | 1.15r    | -------- | -------- |  
-| 16. | -------- | -------- | -------- | -------- |  
-| 17. | -------- | -------- | -------- | -------- |  
-| 18. | -------- | -------- | -------- | -------- |  
-| 19. | -------- | -------- | -------- | -------- |  
-| 20. | -------- | -------- | 1.20r    | -------- |  
-| 21. | -------- | -------- | -------- | -------- |  
-| 22. | -------- | -------- | -------- | -------- |  
-| 23. | -------- | -------- | -------- | -------- |  
-| 24. | 1.12r    | -------- | -------- | -------- |  
-| 25. | -------- | -------- | -------- | -------- |  
-| 26. | -------- | -------- | -------- | -------- |  
-| 27. | -------- | -------- | -------- | -------- |  
-| 28. | -------- | -------- | -------- | -------- |  
-| 29. | -------- | -------- | -------- | -------- |  
-| 30. | -------- | 1.15r    | -------- | 1.30r    |  
-| 31. | -------- | -------- | -------- | -------- |  
-| 32. | -------- | -------- | -------- | -------- |  
-| 33. | -------- | -------- | -------- | -------- |  
-| 34. | -------- | -------- | -------- | -------- |  
-| 35. | -------- | -------- | -------- | -------- |  
-| 36. | 1.12r    | -------- | -------- | -------- |  
-| 37. | -------- | -------- | -------- | -------- |  
-| 38. | -------- | -------- | -------- | -------- |  
-| 39. | -------- | -------- | -------- | -------- |  
-| 40. | -------- | -------- | 1.15r    | -------- |  
-| 41. | -------- | -------- | -------- | -------- |  
-| 42. | -------- | -------- | -------- | -------- |  
-| 43. | -------- | -------- | -------- | -------- |  
-| 44. | -------- | -------- | -------- | -------- |  
-| 45. | -------- | 1.15r    | -------- | -------- |  
-| 46. | -------- | -------- | -------- | -------- |  
-| 47. | -------- | -------- | -------- | -------- |  
-| 48. | 1.12r    | -------- | -------- | -------- |  
-| 49. | -------- | -------- | -------- | -------- |  
-| 50. | -------- | -------- | -------- | -------- |  
-| 51. | -------- | -------- | -------- | -------- |  
-| 52. | -------- | -------- | -------- | -------- |  
-| 53. | -------- | -------- | -------- | -------- |  
-| 54. | -------- | -------- | -------- | -------- |  
-| 55. | -------- | -------- | -------- | -------- |  
-| 56. | -------- | -------- | -------- | -------- |  
-| 57. | -------- | -------- | -------- | -------- |  
-| 58. | -------- | -------- | -------- | -------- |  
+| 1.  |          |          |          |          |  
+| 2.  |          |          |          |          |  
+| 3.  |          |          |          |          |  
+| 4.  |          |          |          |          |  
+| 5.  |          |          |          |          |  
+| 6.  |          |          |          |          |  
+| 7.  |          |          |          |          |  
+| 8.  |          |          |          |          |  
+| 9.  |          |          |          |          |  
+| 10. |          |          |          |          |  
+| 11. | -------- |          |          |          |  
+| 12. | 1.12r    |          |          |          |  
+| 13. |          |          |          |          |  
+| 14. |          | -------- |          |          |  
+| 15. |          | 1.15r    |          |          |  
+| 16. |          |          |          |          |  
+| 17. |          |          |          |          |  
+| 18. |          |          |          |          |  
+| 19. |          |          | -------- |          |  
+| 20. |          |          | 1.20r    |          |  
+| 21. |          |          |          |          |  
+| 22. |          |          |          |          |  
+| 23. | -------- |          |          |          |  
+| 24. | 1.12r    |          |          |          |  
+| 25. |          |          |          |          |  
+| 26. |          |          |          |          |  
+| 27. |          |          |          |          |  
+| 28. |          |          |          |          |  
+| 29. |          | -------- |          | -------- |  
+| 30. |          | 1.15r    |          | 1.30r    |  
+| 31. |          |          |          |          |  
+| 32. |          |          |          |          |  
+| 33. |          |          |          |          |  
+| 34. |          |          |          |          |  
+| 35. | -------- |          |          |          |  
+| 36. | 1.12r    |          |          |          |  
+| 37. |          |          |          |          |  
+| 38. |          |          |          |          |  
+| 39. |          |          | -------- |          |  
+| 40. |          |          | 1.20r    |          |  
+| 41. |          |          |          |          |  
+| 42. |          |          |          |          |  
+| 43. |          |          |          |          |  
+| 44. |          | -------- |          |          |  
+| 45. |          | 1.15r    |          |          |  
+| 46. |          |          |          |          |  
+| 47. | -------- |          |          |          |  
+| 48. | 1.12r    |          |          |          |  
+| 49. |          |          |          |          |  
+| 50. |          |          |          |          |  
+| 51. |          |          |          |          |  
+| 52. |          |          |          |          |  
+| 53. |          |          |          |          |  
+| 54. |          |          |          |          |  
+| 55. |          |          |          |          |  
+| 56. |          |          |          |          |  
+| 57. |          |          |          |          |  
+| 58. |          |          |          |          |  
 | 59. | -------- | -------- | -------- | -------- |  
 
 And here are those row declarations in rowcode: 
@@ -1180,21 +1195,22 @@ Note that in rendering vertical codes all row paddings etc. *have* to be 0 in re
 A complete solution to computing the lowest common multiple (lcm) for sets of numbers greater than 2 (lcmm), in python and using reduce, appears here:
 
 ```python
-# http://stackoverflow.com/questions/147515/least-common-multiple-for-3-or-more-numbers
 
-def gcd(a, b):
-    """Return greatest common divisor using Euclid's Algorithm."""
-    while b:      
-        a, b = b, a % b
-    return a
-
-def lcm(a, b):
-    """Return lowest common multiple."""
-    return a * b // gcd(a, b)
-
-def lcmm(*args):
-    """Return lcm of args."""   
-    return reduce(lcm, args)
+	# http://stackoverflow.com/questions/147515/least-common-multiple-for-3-or-more-numbers
+	
+	def gcd(a, b):
+	    """Return greatest common divisor using Euclid's Algorithm."""
+	    while b:      
+	        a, b = b, a % b
+	    return a
+	
+	def lcm(a, b):
+	    """Return lowest common multiple."""
+	    return a * b // gcd(a, b)
+	
+	def lcmm(*args):
+	    """Return lcm of args."""   
+	    return reduce(lcm, args)
 ```
 
 > The other way to find the lowest common multiple is to list the prime factors for each number. Remove the prime factors both numbers have in common. Multiply one of the numbers by the remaining prime factors of the other number. The result will be the lowest common multiple.
@@ -1299,6 +1315,11 @@ Already have sections on RTL in rendering, but it might be important to point ou
 We can use the syntax (prefix or suffix) to indicate what reading order is encoded. This could matter for queries across collections that contain both. Or just a header for the whole file!
 
 
-## ----------
+### DEV row group height scaling 
 
+	(123)..heights(121)
+
+Here the center row of two is twice as tall as the other rows. I think that css grid has a way of doing this -- or I can just apply scaling manually in css / etc. if the renderer supports it (e.g. graphviz record labels don't).
+
+## ----------
 

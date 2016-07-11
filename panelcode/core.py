@@ -136,29 +136,35 @@ def pstr_to_html (pstr):
     # print '\n----------------------------------------'
     # print '\npstr: ' + pstr
     tables = [x.strip() for x in pstr.split('_')] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
-    rowheight = 'rowheight' # slug for replacing last, since we count rows as we go.
+    rowheight_slug = """{rowheight}""" # slug for replacing last, since we count rows as we go.
     for table in tables:
         print '     table: ' + str(table)
         tstring = ''
-        tstring = '<table class=\'row\' height=\''+str(rowheight)+'\'>\n'
+        tstring = '<table class=\'row\' height=\''+str(rowheight_slug)+'\'>\n'
+        colcount = 0 ; print '          colcount = 0'
+        colcount_slug = """{colcount}"""
+        tstring += '  <tr class="colspacer">' + colcount_slug + '</tr>' # placeholder until columns are counted
         if "(" not in table: # http://stackoverflow.com/questions/5473014/test-a-string-for-a-substring
-            tstring += '  <tr height=\''+str(rowheight)+'\'>\n'
+            tstring += '  <tr height=\''+str(rowheight_slug)+'\'>\n'
             # tstring += '  <tr>\n'
             tstring += '    '
             try:
                 for cellcount in range(0,int(table)):
                     tstring += '<td></td>'
+                    colcount = colcount+1 # ; print '          colcount +1'
             except ValueError:
                 tstring += '<td class="empty"></td>'
+                colcount = colcount+1 # ; print '          colcount +1'
             tstring += '\n'
             tstring += '  </tr>\n'
         elif "(" in table: # http://stackoverflow.com/questions/3437059/does-python-have-a-string-contains-substring-method
             tbgroup = ((table.split(tgroup_start))[1].split(tgroup_end)[0]) #http://stackoverflow.com/questions/3368969/find-string-between-two-substrings
             print '       tbgroup: ' + tbgroup
             tbgroup_rows = [x.strip() for x in tbgroup.split(',')]
+            colrowmax = 0
             for row in tbgroup_rows:
                 print '         row: ' + row
-                tstring += '  <tr height=\''+str(rowheight)+'\'>\n'
+                tstring += '  <tr height=\''+str(rowheight_slug)+'\'>\n'
                 # tstring += '  <tr>\n'
                 rowgroup_cells = [x.strip() for x in row.split('+')]
                 for cellgroup in rowgroup_cells:
@@ -171,29 +177,34 @@ def pstr_to_html (pstr):
                     print '           cells: ' + cellgroup_attribs[0]
                     tstring += '    '
                     for cellcount in range(0,int(cellgroup_attribs[0])):
-                        # tstring += '<td height=\''+str(rowheight)+'\''
+                        # tstring += '<td height=\''+str(rowheight_slug)+'\''
                         tstring += '<td'
+                        cellcols = 1
                         try: # http://stackoverflow.com/questions/8570606/check-element-exists-in-array
-                            for attrib in cellgroup_attribs[1:]: # skip the count, just check attrib(s)
+                            for attrib in cellgroup_attribs[1:]: # skip the count, just check attrib(s)                                
                                 if attrib.startswith('r'):
                                     tstring += ' rowspan=\'' + attrib[1:] + '\'' # value minus 'r' prefix
                                     print '---r attrib:' + attrib[1:]
                                 elif attrib.startswith('c'):
+                                    print '---c attrib:' + attrib[1:]
                                     tstring += ' colspan=\'' + attrib[1:] + '\'' # value minus 'c' prefix
+                                    cellcols = int(attrib[1:]) ;  print '            colcells: ' + str(attrib[1:])
                                 else:
                                     print 'ERROR: Bad attribute (no r/c prefix): ' + attrib
                         except IndexError:
                             pass
                         tstring += '></td>'
+                        colcount = colcount + cellcols ; print '          colcount = ' + str(colcount)
                     tstring += '\n'
                 tstring += '  </tr>\n'
         tstring += '</table>\n'
+        tstring = tstring.replace(colcount_slug, "<td></td>"*colcount)
         pghtmlstring += tstring # add latest table html to page html
-        # print '\ntstring:\n' + tstring + '\n'
+        # print '\ntstring:\n' + tstring + '\n'            
 
     rowcount = pstr_rowcount(pstr)
     rowheight = 60/rowcount
-    pghtmlstring = pghtmlstring.replace("rowheight", str(rowheight))
+    pghtmlstring = pghtmlstring.replace(rowheight_slug, str(rowheight))
     
     return pghtmlstring
 
@@ -206,9 +217,61 @@ def pstr_to_html (pstr):
 def pstr_to_svg (code_string):
     """render a panelcode string as an SVG image"""
     # svg+html template
-    svg_xml1 = """<?xml version="1.0" standalone="yes"?><svg width="75" height="126" viewBox="0 0 75 126" xmlns="http://www.w3.org/2000/svg"><foreignObject x="5" y="10" width="60" height="75"><body xmlns="http://www.w3.org/1999/xhtml"> <style> table.page{ layout: fixed; border: 1px solid black; width: 50px; padding: 0px; border-spacing: 0px 1px; background-color: #aaa; } table.page > tr, table.page > tr > td { border: 0px solid red; border-collapse: collapse; padding: 0px; border-spacing: 0px; } table.row { layout: fixed; border: 0px solid black; width: 100%; height: 100%; padding: 0px; border-spacing: 2px 1px; } table.row > tr > td { # height: 10px; border: 1px solid black; padding: 0px; background-color: #fff; } </style><table class='page'><tr><td>"""
-    svg_xml2 = """</td></tr></table></body></foreignObject><foreignObject x="10" y="85" width="60" height="48"><body xmlns="http://www.w3.org/1999/xhtml"><div style='font-size: 6pt'>"""
-    svg_xml3 = """</div></body></foreignObject></svg>"""
+    svg_xml1 = """<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="75" height="126" viewBox="0 0 75 126">
+	<foreignObject x="5" y="10" width="60" height="75">
+		<body xmlns="http://www.w3.org/1999/xhtml">
+			<style>
+				table.page {
+					layout: fixed;
+					border: 1px solid black;
+					width: 50px;
+					padding: 0px;
+					border-spacing: 0px 1px;
+					background-color: #aaa;
+				}
+				table.page &gt; tr, table.page &gt; tr &gt; td {
+					border: 0px solid red;
+					border-collapse: collapse;
+					padding: 0px;
+					border-spacing: 0px;
+				}
+				table.row {
+					layout: fixed;
+					border: 0px solid black;
+					width: 100%;
+					height: 100%;
+					padding: 0px;
+					border-spacing: 2px 1px;
+				}
+				table.row &gt; tr &gt; td {
+					# height: 10px;
+					border: 1px solid black;
+					padding: 0px;
+					background-color: #fff;
+				}
+				tr.colspacer { visibility: hidden; height: 0px; }
+				tr.colspacer > td { visibility: hidden; height: 0px; }
+			</style>
+			<table class="page">
+				<tr>
+					<td>
+"""
+
+    svg_xml2 = """
+					</td>
+				</tr>
+			</table>
+		</body>
+	</foreignObject>
+	<foreignObject x="10" y="85" width="60" height="48">
+		<body xmlns="http://www.w3.org/1999/xhtml">
+			<div style="font-size: 6pt">"""
+
+    svg_xml3 = """</div>
+		</body>
+	</foreignObject>
+</svg>"""
 
     # convert panelcode to html and embed in template
     svg_text = svg_xml1 + pstr_to_html(code_string) + svg_xml2 + str(code_string) + svg_xml3

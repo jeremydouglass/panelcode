@@ -1,0 +1,519 @@
+<html>
+	<head>
+		<title>HTML CSS TESTS</title>
+		<link rel="stylesheet" type="text/css" href="html-css.css">
+	</head>
+	<body>
+<h1>SVG HTML EXAMPLE</h1>
+
+			<table class="page">
+				<tr>
+					<td>
+<table class='row' height='15'>
+  <tr class="colspacer"><td></td></tr>  <tr height='15'>
+    <td></td>
+  </tr>
+</table>
+<table class='row' height='15'>
+  <tr class="colspacer"><td></td><td></td><td></td></tr>  <tr height='15'>
+    <td class="marked">a</td><td></td><td></td>
+  </tr>
+</table>
+<table class='row' height='15'>
+  <tr class="colspacer"><td></td><td></td></tr>  <tr height='15'>
+    <td class="panel uncoded"></td><td></td>
+  </tr>
+</table>
+<table class='row' height='15'>
+  <tr class="colspacer"><td></td><td></td><td></td><td></td></tr>  <tr height='15'>
+    <td class="panel blank"></td><td></td><td></td><td></td>
+  </tr>
+</table>
+
+					</td>
+				</tr>
+			</table>
+
+<h1>MIXED OUTPUT</h1>
+
+<div class="table layout">
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel uncoded">2</div>
+      <div class="cell panel">3</div>
+    </div>
+  </div>
+</div>
+
+<div class="table layout">
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">2</div>
+      <div class="cell panel marked">3</div>
+    </div>
+  </div>
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">4</div>
+      <div class="cell panel blank">5</div>
+      <div class="cell panel">6</div>
+    </div>
+  </div>
+</div>
+
+<div class="table layout">
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel">2</div>
+      <div class="cell panel">3</div>
+    </div>
+  </div>
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel uncoded">4</div>
+      <div class="cell panel marked">5</div>
+      <div class="cell panel blank">6</div>
+    </div>
+  </div>
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel">7</div>
+      <div class="cell panel">8</div>
+      <div class="cell panel">9</div>
+      <div class="cell panel">10</div>
+    </div>
+  </div>
+</div>
+
+
+<table class="table layout"><tr><td>
+  <table class="table group">
+    <tr class="row r2">
+      <td class="cell panel">1</td>
+    </tr>
+  </table>
+  <table class="table group">
+    <tr class="row r2">
+      <td class="cell panel">2</td>
+      <td class="cell panel">3</td>
+    </tr>
+  </table>
+</td></tr></table>
+<table class="table layout"><tr><td>
+  <table class="table group">
+    <tr class="row r3">
+      <td class="cell panel">1</td>
+    </tr>
+  </table>
+  <table class="table group">
+    <tr class="row r3">
+      <td class="cell panel">2</td>
+      <td class="cell panel">3</td>
+    </tr>
+  </table>
+  <table class="table group">
+    <tr class="row r3">
+      <td class="cell panel blank">4</td>
+      <td class="cell panel uncoded">5</td>
+      <td class="cell panel marked">6</td>
+    </tr>
+  </table>
+</td></tr></table>
+<table class="table layout"><tr><td>
+  <table class="table group">
+    <tr class="row r4">
+      <td class="cell panel">1</td>
+    </tr>
+  </table>
+  <table class="table group">
+    <tr class="row r4">
+      <td class="cell panel">2</td>
+      <td class="cell panel">3</td>
+    </tr>
+  </table>
+  <table class="table group">
+    <tr class="row r4">
+      <td class="cell panel">4</td>
+      <td class="cell panel">5</td>
+      <td class="cell panel">6</td>
+    </tr>
+  </table>
+  <table class="table group">
+    <tr class="row r4">
+      <td class="cell panel">7</td>
+      <td class="cell panel">8</td>
+      <td class="cell panel">9</td>
+      <td class="cell panel">10</td>
+    </tr>
+  </table>
+</td></tr></table>
+
+<hr><hr><hr>
+
+<h1>HTML table TESTS</h1>
+
+<table class="table layout">
+  <table class="table group">
+    <tr class="row r2">
+      <td class="cell panel">1</div>
+    </td>
+  </tr>
+  <table class="table group">
+    <tr class="row r2">
+      <td class="cell panel">2</div>
+      <td class="cell panel">3</div>
+    </td>
+  </tr>
+</td></tr></table>
+
+<h1>HTML CSS display:table TESTS</h1>
+
+<p>uh-oh. looks like rowspans *can't* be done with css display:table! showstopper. need either css flex (?) or css grid -- or just html table.</p>
+
+can it be done with flex? or just grid?
+
+<h2>TEST OUTPUT CSS display:table</h2>
+<div class="table layout">
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel">2</div>
+      <div class="cell panel">3</div>
+    </div>
+  </div>
+</div>
+
+
+
+<h2>(1,2,3)</h2>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 2 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">2</div>
+      <div class="cell panel">3</div>
+    </div>
+  </div>
+  <!-- row of 3 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">4</div>
+      <div class="cell panel">5</div>
+      <div class="cell panel">6</div>
+    </div>
+  </div>
+</div>
+
+
+<h2>(1,2,3)</h2>
+<p>With uncoded, marked and blank cells:</p>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 2 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel uncoded">2</div>
+      <div class="cell panel">3</div>
+    </div>
+  </div>
+  <!-- row of 3 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel marked">4</div>
+      <div class="cell panel">5</div>
+      <div class="cell panel blank">6</div>
+    </div>
+  </div>
+</div>
+
+
+<h2>(1,2,3)</h2>
+<p>With an extra row -- layout page gets longer:</p>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 2 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel uncoded">2</div>
+      <div class="cell panel">3</div>
+    </div>
+  </div>
+  <!-- row of 3 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">4</div>
+      <div class="cell panel">5</div>
+      <div class="cell panel blank">6</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+
+<h2>(1)</h2>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r1">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+<h2>(1,2)</h2>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+
+<h2>(9)</h2>
+<div class="table layout">
+  <!-- row of 9 -->
+  <div class="table group">
+    <div class="row r1">
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel blank">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel marked">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel uncoded">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+<h2>(15)</h2>
+<div class="table layout">
+  <!-- row of 9 -->
+  <div class="table group">
+    <div class="row r1">
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+
+
+<h2>(1,1)</h2>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r2">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+<h2>(1,1,1)</h2>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r3">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+<h2>(1,1,1,1)</h2>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r4">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+</div>
+
+
+<h2>(1,2,3,4,5,6)</h2>
+<div class="table layout">
+  <!-- row of 1 -->
+  <div class="table group">
+    <div class="row r6">
+      <div class="cell panel">1</div>
+    </div>
+  </div>
+  <!-- row of 2 -->
+  <div class="table group">
+    <div class="row r6">
+      <div class="cell panel">2</div>
+      <div class="cell panel">3</div>
+    </div>
+  </div>
+  <!-- row of 3 -->
+  <div class="table group">
+    <div class="row r6">
+      <div class="cell panel">4</div>
+      <div class="cell panel">5</div>
+      <div class="cell panel">6</div>
+    </div>
+  </div>
+  <!-- row of 4 -->
+  <div class="table group">
+    <div class="row r6">
+      <div class="cell panel">7</div>
+      <div class="cell panel">8</div>
+      <div class="cell panel">9</div>
+      <div class="cell panel">10</div>
+    </div>
+  </div>
+  <!-- row of 5 -->
+  <div class="table group">
+    <div class="row r6">
+      <div class="cell panel">11</div>
+      <div class="cell panel">12</div>
+      <div class="cell panel">13</div>
+      <div class="cell panel">14</div>
+      <div class="cell panel">15</div>
+    </div>
+  </div>
+  <!-- row of 6 -->
+  <div class="table group">
+    <div class="row r6">
+      <div class="cell panel">16</div>
+      <div class="cell panel">17</div>
+      <div class="cell panel">18</div>
+      <div class="cell panel">19</div>
+      <div class="cell panel">20</div>
+      <div class="cell panel">21</div>
+    </div>
+  </div>
+  <!-- row of 6 -->
+</div>
+</div>
+
+<hr>
+<hr>
+<hr>
+
+<table>
+  <thead>
+  <tr>
+     <th>Month</th>
+     <th>Savings</th>
+  </tr>
+  </thead>
+  <tfoot>
+  <tr>
+      <td>Sum</td>
+      <td>$180</td>
+  </tr>
+  </tfoot>
+  <tbody>
+  <tr>
+     <td>January</td>
+     <td>$100</td>
+  </tr>
+  <tr>
+      <td>February</td>
+      <td>$80</td>
+  </tr>
+  </tbody>
+</table>
+
+	</body>
+</html>

@@ -1,0 +1,9 @@
+
+Other than the dire problem with fixed columns (e.g. no five-panel rows, since bootstrap 12 isn't divisible by 5 etc. etc. etc.)
+...and the headache / potential workaround in generating bootstrap layouts for columns 1-through-n
+...another big issue is the render order. There are no rowspans or colspans, so you embed extra vertical (!) divs and stack half-height rows.
+Because you stack, this means that render order is different from reading order (unlike tables). See an example here:
+
+http://jsfiddle.net/DRanJ/1560/
+
+...if you stretch the screen out, you'll see the a b c render order. Not good.

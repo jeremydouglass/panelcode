@@ -1,0 +1,247 @@
+/* http://stackoverflow.com/questions/16398823/why-is-a-div-with-display-table-cell-not-affected-by-margin */
+
+/* http://stackoverflow.com/questions/18346083/space-between-divs-display-table-cell */
+
+/* http://jsfiddle.net/FhQwb/1132/ */
+
+div.layout {
+	width: 300px;
+	max-width: 300px;
+	height: 300px;
+	max-height: 300px;
+
+	display: table;
+	border-collapse: separate;
+	border-spacing: 0px;
+
+	border-style: solid;
+	border-color: black;
+	/* border-color: red; */
+	border-width: 2px;
+	background-color: #ffffff;
+	padding: 10px 5px;
+}
+
+div.group {
+	width: 100%;
+/* 	width: 100%;  */
+/*	height: 100%; */
+
+	display: table;
+	border-collapse: separate;
+	border-spacing: 10px 5px;
+	padding: 0px;
+
+	border-style: solid;
+	border-color: white;
+/*	border-color: blue; */
+	border-width: 0px;
+
+}
+
+div.panel {
+	background-color: #cccccc;
+	display: table-cell;
+	padding: 10px 10px 10px 10px;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	padding: 1px;
+	/* overflow? */
+}
+
+div.panel.marked {
+	background-color: #ff0000;
+	margin: 20px;
+}
+
+div.panel.uncoded {
+	background-color: #555555;
+}
+
+div.panel.blank {
+	border-color: #000000;
+	border-width: 0px;
+	background-color: #ffffff;
+}
+
+
+div.row {
+	display: table-row;
+}
+
+/*
+div.row.r1 { height: 100%; }
+div.row.r2 { height: 50%; }
+div.row.r3 { height: 33.33%; }
+*/
+
+div.row.r1 {
+	height: 300px;
+		
+}
+div.row.r2 {
+	height: 150px;
+}
+div.row.r3 {
+	height: 100px;
+	/*	min-height: 100px; */
+	/*	max-height: 100px; */
+	/*  margin: 10px 10px 10px 10px; */
+	/*  padding: 10px 10px 10px 10px; */
+	/*	border-spacing: 10px 0px 0px 10px; */
+}
+
+div.row.r4 {
+	height: 75px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+div.row.r5 {
+	height: 60px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+div.row.r6 {
+	height: 50px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+div.row.r7 {
+	height: 43px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+div.row.r8 {
+	height: 37px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+div.row.r9 {
+	height: 33px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+
+
+
+/* html table tests */
+/* **************** */
+
+table.layout {
+	layout: fixed;
+	/* display: table; */
+	width: 300px;
+	max-width: 300px;
+	height: 300px;
+	max-height: 300px;
+
+	border-collapse: separate;
+	border-spacing: 0px;
+
+	border-style: solid;
+	border-color: black;
+	/* border-color: red; */
+	border-width: 2px;
+	background-color: #ffffff;
+	padding: 10px 5px;
+}
+
+/*
+table.layout > tbody > tr, table.layout > tr > td {
+	border: 0px solid red;
+	border-collapse: collapse;
+	padding: 0px;
+	border-spacing: 0px;
+}
+*/
+
+table.group {
+	layout: fixed;
+	/* display: table; */
+	width: 100%;
+	display: table;
+	border-collapse: separate;
+	border-spacing: 10px 5px;
+	padding: 0px;
+
+	border-style: solid;
+	border-color: white;
+	border-width: 0px;
+}
+
+td.panel {
+	background-color: #cccccc;
+	/* display: table-cell; */
+	padding: 10px 10px 10px 10px;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	padding: 1px;
+/*
+	height: 10px;
+	border: 1px solid black;
+	padding: 0px;
+	background-color: #fff;
+*/
+}
+
+tr.colspacer { visibility: hidden; height: 0px; }
+tr.colspacer > td { visibility: hidden; height: 0px; }
+
+td.marked {
+	background-color: #ff0000;
+	margin: 20px;
+	border: 2px solid red;
+}
+
+td.uncoded {
+	background-color: #555555;
+}
+
+td.blank {
+	border-color: #000000;
+	border-width: 0px;
+	background-color: #ffffff;
+}
+
+tr.row.r1 {
+	height: 300px;
+		
+}
+tr.row.r2 {
+	height: 150px;
+}
+tr.row.r3 {
+	height: 100px;
+}
+
+tr.row.r4 {
+	height: 75px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+tr.row.r5 {
+	height: 60px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+tr.row.r6 {
+	height: 50px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+tr.row.r7 {
+	height: 43px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+tr.row.r8 {
+	height: 37px;
+	border-spacing: 10px 0px 0px 10px;
+}
+
+tr.row.r9 {
+	height: 33px;
+	border-spacing: 10px 0px 0px 10px;
+}

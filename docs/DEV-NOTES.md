@@ -138,6 +138,60 @@ Big picture:
 		-  searched, summarized, queried, and analyzed (e.g. regex, imported into trees and then queried, a la XPATH)
 		-  data visualized...?
 
+## Project Restructuring
+
+
+```python
+
+	## PANELCODE
+	
+	import panelcode as pc
+	import utils
+	
+	## PARSING
+	
+	import pc.parse           as pcp
+	import    pcp.shorthands  as pcp.sh
+	import    pcp.pyparsing   as pcp.pp
+	import    pcp.regex       as pcp.re
+	...
+	
+	## SEARCHING
+	
+	import pc.search       as pcs
+	import    pcs.analyze  as pcs_a
+	
+	## RENDERING
+
+	import pc.render                  as pcr
+	import    pcr.html_table          as pcr_htable
+	import    pcr.html_display_table  as pcr_dtable
+	import    pcr.html_css_flex       as pcr_flex
+	import    pcr.html_css_grid       as pcr_grid
+	import    pcr.html_bootstrap      as pcr_bs
+	import    pcr.graphviz            as pcr_gv
+	import    pcr.svg_html            as pcr_svgh
+	...
+	import    pcr.neo4j               as pcr_neo4j
+	import    pcr.processing          as pcr_proc
+	import    pcr.context_free        as pcr_cf # https://github.com/PaulMcMillan/cfdg/blob/master/kindle_render.py
+
+```
+	
+Some tests:
+
+(1,2,3)
+(1,1+1,1+1+1)
+(1,2,1+1+1)
+(1.r2+1,1)
+(r2+1,1)
+(1+r2+r2,1)
+(1+1.r2+1.r2,1)
+(c2+r2,1+1)
+(1.c2+1.r2,1+1)
+(c2+r2,2)
+(1.c2+1.r2,2)
+
 
 
 ## CODE NOTES
@@ -154,7 +208,7 @@ Big picture:
 
 #### python virtualenv notes
 
-1. `source ./~profile`
+1. `source ~/.profile`
 2. from anywhere: `workon panelcode`
 3. ...work...
 4. `deactivate`
