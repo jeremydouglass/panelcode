@@ -1,7 +1,73 @@
 ## Syntax
 
+ [~]:             ../../script/output/~.svg
+ [(~)]:           ../../script/output/(~).svg
+ [5(~)]:           ../../script/output/5(~).svg
+ [3_5(~)]:           ../../script/output/3_5(~).svg
+
+ [1_2_~]:         ../../script/output/1_2_~.svg
+ [3_(~)]:       ../../script/output/3_(~).svg
+ [3(r2+~,1)]:   ../../script/output/3(r2+~,1).svg
+
+ [3(1+c2+1)]:   ../../script/output/3(1+c2+1).svg
+
+ [0]:             ../../script/output/0.svg
+ [3]:             ../../script/output/3.svg
+ [4]:             ../../script/output/4.svg
+ [5]:             ../../script/output/5.svg
+
+[1_2]:           ../../script/output/1_2.svg
+[1_2_0]:         ../../script/output/1_2_0.svg
+[1_2_3]:         ../../script/output/1_2_3.svg
+ [1_2_3_1_2_3]:   ../../script/output/1_2_3_1_2_3.svg
+ [(r2+1,1)_(r2+1,1)]: ../../script/output/(r2+1,1)_(r2+1,1).svg
+
+ [1_2_3_4_5_6]:   ../../script/output/1_2_3_4_5_6.svg
+ [1_3_2_4]:       ../../script/output/1_3_2_4.svg
+ [2]:             ../../script/output/2.svg
+ [2_(1+0)]:       ../../script/output/2_(1+0).svg
+ [2_2]:           ../../script/output/2_2.svg
+ [2(c2+1)]:       ../../script/output/2(c2+1).svg
+[2_2_2_1_1_2_1]: ../../script/output/2_2_2_1_1_2_1.svg
+[2_2++3_3]:      ../../script/output/2_2++3_3.svg
+[2_3]:           ../../script/output/2_3.svg
+[2_3_2]:         ../../script/output/2_3_2.svg
+[2_3_2++]:       ../../script/output/2_3_2.svg
+ [2_3_3(1+r2,1)]: ../../script/output/2_3_3(1+r2,1).svg
+ [2_3_5]:         ../../script/output/2_3_5.svg
+[2_2_5(r2+2,2)]: ../../script/output/2_2_5(r2+2,2).svg
+[2_5_1_3_2]:     ../../script/output/2_5_1_3_2.svg
+ [3(r2+1,1)]:     ../../script/output/3(r2+1,1).svg
+[3(1+r2,1)]:     ../../script/output/3(1+r2,1).svg
+[3_3]:           ../../script/output/3_3.svg
+[3_3_3]:         ../../script/output/3_3_3.svg
+[3_3_3_3_3]:     ../../script/output/3_3_3_3_3.svg
+
+ [3(r2,1)]:       ../../script/output/3(r2,1).svg
+[4(r3+1,1,1)]:   ../../script/output/4(r3+1,1,1).svg
+[4(1+r3,1,1)]:   ../../script/output/4(1+r3,1,1).svg
+[5(1+r2+1,2)]:   ../../script/output/5(1+r2+1,2).svg
+[5(r2+1+r2,1)]:  ../../script/output/5(r2+1+r2,1).svg
+[5(r2+2,2)]:     ../../script/output/5(r2+2,2).svg
+[5(2+r2,2)]:     ../../script/output/5(2+r2,2).svg
+
+[0_(2+0+2)_0]:   ../../script/output/0_(2+0+2)_0.svg
+[0_1_(1+0)]:     ../../script/output/0_1_(1+0).svg
+
+[0_2_0]:         ../../script/output/0_2_0.svg
+[0_3_0]:         ../../script/output/0_3_0.svg
+[3(r2+0,1)]:     ../../script/output/3(r2+0,1).svg
+
+[2_(1,0)]:       ../../script/output/2_(1,0).svg
+ [2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)]: ../../script/output/2_5(1+r2+r2+r2,1)_4(r2+r2+1,1).svg
+
+[3_3_3_3]:       ../../script/output/3_3_3_3.svg
+[4_4_4_4_4]:     ../../script/output/4_4_4_4_4.svg
+[6_6_6_6_6_6_6_6_6]: ../../script/output/6_6_6_6_6_6_6_6_6.svg
 
 ### Rows: `_`
+
+
 
 Each number signifies a row: 
 
@@ -17,13 +83,19 @@ Each number signifies a row:
 
 #### group intro A
 
-Groups specify complex row layouts -- in particular, stacking together panels of different row depths and column heights ('colspans'. These are indicated in groups by 'rowspan' (`r2`, `r3` etc.) and 'colspan' (`c2`,`c3`).
+Groups specify complex row layouts -- in particular, stacking together panels of different row depths and column heights into a single unit. These are differences in width and height are indicated in groups by 'rowspan' (`r2`, `r3` etc.) and 'colspan' (`c2`,`c3`).
 
 	(1.r2 + 4 + 1.c2.r2, 2.c2)
 
-This can be simplified by ommiting the optional `.` and ommiting the `1` in front of any single panel.
+This group contains a single panel two rows high (1.r2), four more panels (4), then a single panel that is two-by-two (1.c2.r2). On the next row (,) are two mmore panels, each two columns wide (2.c2).
+
+This can be simplified by ommiting the optional `.` separator.
+
+It can be further simplified by ommiting the optional `1` in front of any single panel with a row or column modifier. Here is the result:
 
 	(r2+4+c2r2,2c2)
+
+![](../../script/output/r2+4+c2r2,2c2.svg)
 
 Consider this simple group:
 
@@ -49,10 +121,10 @@ Panelgroups scale panels with row and column spans. Multi-row panels (`r2`, `r3`
 
 Groups and rows may be stacked horizontally (`_`) to form a single layout.
 
-| Panelcode                          |  render                               |
-|------------------------------------|---------------------------------------|
-|  `2_3_3(1+r2,1)`                   |  ![][2_3_3(1+r2,1)]                   |  
-|  `2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)`  |  ![][2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)]  |
+| Panelcode                          |  render                               |  description         |
+|------------------------------------|---------------------------------------|----------------------|
+|  `2_3_3(1+r2,1)`                   |  ![][2_3_3(1+r2,1)]                   |  A row of 2 panels, 3 panels, and 3 panels. The third row consists of a panel, a double-height panel, and a last panel filing in the next line.     |
+|  `2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)`  |  ![][2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)]  |  A row of 2 panels, 5 panels, and 4 panels. The second and third rows each combine double-height panels and single panels into a block.             |
 
 #### group intro B
 
@@ -143,18 +215,22 @@ By extension, any "normal" layout could be defined as a single group. For exampl
 
 Groups `( )` which contain only simple rows are reduced to simple rows.
 
-|  zero codes                      |  original     |  Panelcode |  render        |
+|                                  |  original     |  Panelcode |  render        |
 |----------------------------------|---------------|------------|----------------|
 |  group with simple row           |  `1_(2)`      |  `1_2`     |  ![][1_2]      |
 |  groups with simple rows         |  `(1)_(2)`    |  `1_2`     |  ![][1_2]      |
 |  empty groups with hints         |  `1()_2()`    |  `1_2`     |  ![][1_2]      |
-|  empty groups                    |  `()_()`      |  invalid   |                |
 |  group with simple rows          |  `1_(2,3)`    |  `1_2_3`   |  ![][1_2_3]    |
 |  group with simple rows (blank)  |  `1_(2,0)`    |  `1_2_0`   |  ![][1_2_0]    |
 |  group with simple rows (uncod)  |  `1_(2,~)`    |  `1_2_~`   |  ![][1_2_~]    |
-|  group with missing row          |  `1_(2,)`     |  invalid   |                |
-|  group with missing rows         |  `1_(,)`      |  invalid   |                |
-|  group with missing rows         |  `3(,)`       |  invalid   |                |
+
+
+|                                  |  original     |  Panelcode |
+|----------------------------------|---------------|------------|
+|  empty groups                    |  `()_()`      |  invalid   |
+|  group with missing row          |  `1_(2,)`     |  invalid   |
+|  group with missing rows         |  `1_(,)`      |  invalid   |
+|  group with missing rows         |  `3(,)`       |  invalid   |
 
 
 ### Blanks: `0`
@@ -169,7 +245,7 @@ The zero marker (`0`) acts as a placeholder to indicate these empty areas in the
 |------------------------|---------------|---------------------------------|
 |  blank page            |  `0`          |  ![][0]                         |
 |  blank rows            |  `0_2_0`      |  ![][0_2_0]                     |
-|  blank in group        |  `2_(1+0)`    |  ![][2_(1+0)]                   |
+|  blank in group (ERROR)        |  `2_(1+0)`    |  ![][2_(1+0)]                   |
 |  blank in group        |  `3(r2+0,1)`  |  ![][3(r2+0,1)]                 |
 
 
@@ -200,9 +276,9 @@ Rather than ommiting a panel at the end of a group row, specify a blank.
 
 Ommitting a panel may generate a similar  visual output under certain circumstances, however it may also change the markup in unpredictable ways, and makes it difficult to search, render, and validate a panelcode. Instead, specify the blank.
 
-|  zero codes                         |  Panelcode    |  render                      |
+|                                     |  Panelcode    |  render                      |
 |-------------------------------------|---------------|------------------------------|
-|  missing panel in rowgroup (wrong)  |  `3(r2,1)`    |  ![][3(r2,1)]                |
+|  missing panel in rowgroup (wrong)  |  `3(r2,1)`    |                              |
 |    blank panel in rowgroup (right)  |  `3(r2+0,1)`  |  ![][3(r2+0,1)]              |
 
 
@@ -212,19 +288,19 @@ Some layouts elements cannot be encoded or rendered in Panelcode. The uncoded ma
 
 The row separator is used in an empty group to indicate that the group layout is not encoded.
 
-|  Panelcode   |  Panelcode      |  uncoded markers               |
-|--------------|-----------------|--------------------------------|
-|  `~`         |  ![][(~)]       |  uncoded page                  |
-|  `3_(~)`     |  ![][3_(~)]     |  uncoded group                 |
-|  `(r2+~,1)` |  ![][3(r2+~,1)]  |  uncoded panel in group        |
+|  uncoded markers               |  Panelcode   |  render         |
+|--------------------------------|--------------|-----------------|
+|  uncoded page                  |  `~`         |  ![][(~)]       |
+|  uncoded group                 |  `3_(~)`     |  ![][3_(~)]     |
+|  uncoded panel in group        |  `(r2+~,1)`  |  ![][3(r2+~,1)] |
 
 Uncoded pages and groups `(~)` may optionally be prefixed by a panel count: `3(~)`.
 
-|  Panelcode   |  Panelcode      |  uncoded markers               |
-|--------------|-----------------|--------------------------------|
-|  `5(~)`      |  ![][5(~)]      |  uncoded page w/count hint     |
-|  `3_5(~)`    |  ![][3_5(~)]    |  uncoded group w/count hint    |
-|  `3(r2+~,1)` |  ![][3(r2+~,1)] |  uncoded panel in group w/hint |
+|  uncoded markers               |  Panelcode   |  render         |
+|--------------------------------|--------------|-----------------|
+|  uncoded page w/count hint     |  `5(~)`      |  ![][5(~)]      |
+|  uncoded group w/count hint    |  `3_5(~)`    |  ![][3_5(~)]    |
+|  uncoded panel in group w/hint |  `3(r2+~,1)` |  ![][3(r2+~,1)] |
 
 If a count is included, renderers may use a row of specially marked panels as a layout placeholder, rather than a single marked panel.
 
@@ -239,7 +315,7 @@ Internally, the `~` panel is represented as `1.uncoded` -- a single panel with s
 
 
 
-If the _ marker wasn't being used, perhaps it could be used for uncoded? Although ~ seems more semantic, and less likely to be mistaken for space. Perhaps the underscore should be used instead of 0 to code for blank. After all, there is 1 panel.
+> > If the _ marker wasn't being used, perhaps it could be used for uncoded? Although ~ seems more semantic, and less likely to be mistaken for space. Perhaps the underscore should be used instead of 0 to code for blank. After all, there is 1 panel.
 
 		(~)		(_)		(-)
 
@@ -248,18 +324,22 @@ If the _ marker wasn't being used, perhaps it could be used for uncoded? Althoug
 
 Panelcode supports a variety of shorthand syntaxes to make reading and writing panelcode easier and more expressive.
 
+For example:
+
+-  "quick" shorthand describes a layout using only rows
+-  "alpha" shorthand summarizes small groups of  
+
 Shorthands are indicated within `[ ]`. Each shorthand defines a row or group of rows.
 
 Shorthands are pre-processed and replaced before a panelcode is manipulated or rendered. In general they are expanded into a canonical rowcode form.
-
 
 **Examples:**
 
 |  shorthand   |  code    |             |                |  rowcode        |  render               |
 |--------------|----------|-------------|----------------|-----------------|-----------------------|
-|  alpha code  |  `[C]`   |  `[C].a`    |  `[C].alpha`   | `3(r2+1,1)`     |  ![C][3(r2+1,1)]      |
-|  span code   |  `[2L]`  |  `[2L].s`   |  `[2L].span`   | `2(c2+1)`       |  ![2L][2(c2+1)]       |
-|  vert code   |          |  `[212].v`  |  `[212].vert`  | `5(1+r2+1,2)`   |  ![][5(1+r2+1,2)]     |
+|  alpha       |  `[C]`   |  `[C].a`    |  `[C].alpha`   | `3(r2+1,1)`     |  ![C][3(r2+1,1)]      |
+|  span        |  `[2L]`  |  `[2L].s`   |  `[2L].span`   | `2(c2+1)`       |  ![2L][2(c2+1)]       |
+|  vert        |          |  `[212].v`  |  `[212].vert`  | `5(1+r2+1,2)`   |  ![v][5(1+r2+1,2)]     |
 |              |          |             |                |                 |                       |
 |  multipler   |  `4[*5]` |             |                | `4_4_4_4_4`     |  ![][4_4_4_4_4]       |
 
@@ -363,31 +443,34 @@ By default panels in a row are equal width. Within a rowgroup, column span marke
 
 Consider a 3-panel row with a wider center panel. "3W" makes encoding and easier.
 
-|            |  spancode  |  rowcode      |  render               |
-|------------|------------|---------------|-----------------------|
-| a '3-wide' |  `[3W]`    |  `3(1+c2+1)`  |                       |
+|            |  spancode  |  rowcode      |  render             |
+|------------|------------|---------------|---------------------|
+| a '3-wide' |  `[3W]`    |  `3(1+c2+1)`  |  ![][3(1+c2+1)]     |
+
+|  rowcode without spans  |  render               |
+|-------------------------|-----------------------|
+|   `2`                   |  ![2][2]              |
+|   `3`                   |  ![3][3]              |
+|   `4`                   |  ![4][4]              |
+|   `5`                   |  ![5][5]              |
 
 
 |  spancode           |  rowcode        |  render               |
 |---------------------|-----------------|-----------------------|
-|   `2`               |  `2`            |  ![2][2]              |
-|  `[2L] | [2Left]`   |  `2(c2+1)`      |  ![2L][2(c2+1)]       |
-|  `[2R] | [2Right]`  |  `2(1+c2)`      |  ![2R][2(1+c2)]       |
-|   `3`               |  `3`            |  ![3][3]              |
-|  `[3L] | [3Left]`   |  `3(c2+2)`      |  ![3L][3(c2+2)]       |
-|  `[3R] | [3Right]`  |  `3(2+c2)`      |  ![3R][3(2+c2)]       |
-|  `[3W] | [3Wide]`   |  `3(1+c2+1)`    |  ![3W][3(1+c2+1)]     |
-|  `[3N] | [3Narrow]` |  `3(c2+1+c2)`   |  ![3N][3(c2+1+c2)]    |
-|   `4`               |  `4`            |  ![4][4]              |
-|  `[4L] | [4Left]`   |  `4(c2+3)`      |  ![4L][4(c2+3)]       |
-|  `[4R] | [4Right]`  |  `4(3+c2)`      |  ![4R][4(3+c2)]       |
-|  `[4W] | [4Wide]`   |  `4(1+c2+c2+1)` |  ![4W][4(1+c2+c2+1)]  |
-|  `[4N] | [4Narrow]` |  `4(c2+2+c2)`   |  ![4N][4(c2+2+c2)]    |
-|   `5`               |  `5`            |  ![5][5]              |
-|  `[5L] | [5Left]`   |  `5(c2+4)`      |  ![5L][5(c2+2)]       |
-|  `[5R] | [5Right]`  |  `5(4+c2)`      |  ![5R][5(2+c2)]       |
-|  `[5W] | [5Wide]`   |  `5(1+c3+1)`    |  ![5W][5(1+c2+1)]     |
-|  `[5N] | [5Narrow]` |  `5(c2+3+c2)`   |  ![5N][5(c2+1+c2)]    | 
+|  `[2L] / [2Left]`   |  `2(c2+1)`      |  ![2L][2(c2+1)]       |
+|  `[2R] / [2Right]`  |  `2(1+c2)`      |  ![2R][2(1+c2)]       |
+|  `[3L] / [3Left]`   |  `3(c2+2)`      |  ![3L][3(c2+2)]       |
+|  `[3R] / [3Right]`  |  `3(2+c2)`      |  ![3R][3(2+c2)]       |
+|  `[3W] / [3Wide]`   |  `3(1+c2+1)`    |  ![3W][3(1+c2+1)]     |
+|  `[3N] / [3Narrow]` |  `3(c2+1+c2)`   |  ![3N][3(c2+1+c2)]    |
+|  `[4L] / [4Left]`   |  `4(c2+3)`      |  ![4L][4(c2+3)]       |
+|  `[4R] / [4Right]`  |  `4(3+c2)`      |  ![4R][4(3+c2)]       |
+|  `[4W] / [4Wide]`   |  `4(1+c2+c2+1)` |  ![4W][4(1+c2+c2+1)]  |
+|  `[4N] / [4Narrow]` |  `4(c2+2+c2)`   |  ![4N][4(c2+2+c2)]    |
+|  `[5L] / [5Left]`   |  `5(c2+4)`      |  ![5L][5(c2+2)]       |
+|  `[5R] / [5Right]`  |  `5(4+c2)`      |  ![5R][5(2+c2)]       |
+|  `[5W] / [5Wide]`   |  `5(1+c3+1)`    |  ![5W][5(1+c2+1)]     |
+|  `[5N] / [5Narrow]` |  `5(c2+3+c2)`   |  ![5N][5(c2+1+c2)]    | 
 
 
 	2L_2R_2L = (c2+1)_(1+c2)_(c2+1)
@@ -415,8 +498,8 @@ The multiplier shorthand (`[*3]`) expands n repetitions of the previous term or 
 |  `3[*2]`           |  `3_3`                       |  ![][3_3]                     | repeat simple rows |
 |  `3[*5]`           |  `3_3_3_3_3`                 |  ![][3_3_3_3_3]               | "   "              |
 |  `[123][*2]`       |  `[123]_[123]`=`1_2_3_1_2_3` |  ![][1_2_3_1_2_3]             | "   "              |
-|  `[3C][*2]`        |  `[3C]_[3C]`                 |  `(r2+1,1)_(r2+1,1)`          | repeat shorthand   |
-|  `[v212][*2]`      |  `[v212]_[v212]`             |  `(r2+1,1)_(r2+1,1)`          | "   "              |
+|  `[3C][*2]`        |  `[3C]_[3C]` `(r2+1,1)_(r2+1,1)`  | ![][(r2+1,1)_(r2+1,1)]     | repeat shorthand   |
+|  `[v212][*2]`      |  `[v212]_[v212]` `(r2+1,1)_(r2+1,1)`  | ![][(r2+1,1)_(r2+1,1)] | "   "              |
 |  `(r2+r2+1,1)[*2]` |  `(r2+r2+1,1)_(r2+r2+1,1)`   |  ![][(r2+r2+1,1)(r2+r2+1,1)]` | repeat group       |
 
 The multiplier is expanded before all other shorthands are applied.
