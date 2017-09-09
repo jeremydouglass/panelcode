@@ -219,8 +219,15 @@ def pstr_to_svg (code_string):
     """render a panelcode string as an SVG image"""
     # svg+html template
     svg_xml1 = """<?xml version="1.0" standalone="yes"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="75" height="126" viewBox="0 0 75 126">
-	<foreignObject x="5" y="10" width="60" height="75">
+<svg xmlns="http://www.w3.org/2000/svg" width="75" height="156" viewBox="0 0 75 156">
+	<foreignObject x="10" y="10" width="60" height="48">
+		<body xmlns="http://www.w3.org/1999/xhtml">
+			<div style="font-size: 6pt">"""
+
+    svg_xml2 = """</div>
+		</body>
+	</foreignObject>
+	<foreignObject x="5" y="20" width="60" height="126">
 		<body xmlns="http://www.w3.org/1999/xhtml">
 			<style>
 				table.page {
@@ -259,23 +266,16 @@ def pstr_to_svg (code_string):
 					<td>
 """
 
-    svg_xml2 = """
+    svg_xml3 = """
 					</td>
 				</tr>
 			</table>
 		</body>
 	</foreignObject>
-	<foreignObject x="10" y="85" width="60" height="48">
-		<body xmlns="http://www.w3.org/1999/xhtml">
-			<div style="font-size: 6pt">"""
-
-    svg_xml3 = """</div>
-		</body>
-	</foreignObject>
 </svg>"""
 
     # convert panelcode to html and embed in template
-    svg_text = svg_xml1 + pstr_to_html(code_string) + svg_xml2 + str(code_string) + svg_xml3
+    svg_text = svg_xml1 + str(code_string) + svg_xml2 + pstr_to_html(code_string) + svg_xml3
 
     return svg_text
 
