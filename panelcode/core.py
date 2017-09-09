@@ -161,6 +161,7 @@ def pstr_to_html (pstr):
             tbgroup = ((table.split(tgroup_start))[1].split(tgroup_end)[0]) #http://stackoverflow.com/questions/3368969/find-string-between-two-substrings
             print '       tbgroup: ' + tbgroup
             tbgroup_rows = [x.strip() for x in tbgroup.split(',')]
+            print tbgroup_rows
             colrowmax = 0
             for row in tbgroup_rows:
                 print '         row: ' + row
@@ -184,9 +185,9 @@ def pstr_to_html (pstr):
                             for attrib in cellgroup_attribs[1:]: # skip the count, just check attrib(s)                                
                                 if attrib.startswith('r'):
                                     tstring += ' rowspan=\'' + attrib[1:] + '\'' # value minus 'r' prefix
-                                    print '---r attrib:' + attrib[1:]
+                                    print '           ---r attrib:' + attrib[1:]
                                 elif attrib.startswith('c'):
-                                    print '---c attrib:' + attrib[1:]
+                                    print '           ---c attrib:' + attrib[1:]
                                     tstring += ' colspan=\'' + attrib[1:] + '\'' # value minus 'c' prefix
                                     cellcols = int(attrib[1:]) ;  print '            colcells: ' + str(attrib[1:])
                                 else:
@@ -295,7 +296,11 @@ def app_batch_svg (batchstring):
     """write a series of SVG files based on a string of many panelcodes"""
     svg_file_list = []
     batchstring = pstr_decomposite_pages(batchstring)
+    print 'batchstring: '
+    print batchstring
     pstrings = [x.strip() for x in batchstring.splitlines()]
+    print 'pstrings: '
+    print pstrings
     for pstr in pstrings:
         pstr=pstr_clean(pstr)
         if len(pstr)>0:
