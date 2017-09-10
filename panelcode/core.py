@@ -140,10 +140,11 @@ def pstr_to_html (pstr):
     for table in tables:
         print '     table: ' + str(table)
         tstring = ''
-        tstring = '<table class=\'row\' height=\''+str(rowheight_slug)+'\'>\n'
+        tstring = '<table class=\'row\'>\n'
         colcount = 0 ; print '          colcount = 0'
+        colrowmax = 0; print '          colrowmax = 0'
         colcount_slug = """{colcount}"""
-        tstring += '  <tr class="colspacer">' + colcount_slug + '</tr>' # placeholder until columns are counted
+        tstring += '  <tr class="colspacer">' + colcount_slug + '</tr>\n' # placeholder until columns are counted
         if "(" not in table: # http://stackoverflow.com/questions/5473014/test-a-string-for-a-substring
             tstring += '  <tr height=\''+str(rowheight_slug)+'\'>\n'
             # tstring += '  <tr>\n'
@@ -197,9 +198,13 @@ def pstr_to_html (pstr):
                         tstring += '></td>'
                         colcount = colcount + cellcols ; print '          colcount = ' + str(colcount)
                     tstring += '\n'
+                    if colrowmax < colcount:
+                        colrowmax = colcount
+                    
                 tstring += '  </tr>\n'
+                colcount = 0
         tstring += '</table>\n'
-        tstring = tstring.replace(colcount_slug, "<td></td>"*colcount)
+        tstring = tstring.replace(colcount_slug, "<td></td>"*colrowmax)
         pghtmlstring += tstring # add latest table html to page html
         # print '\ntstring:\n' + tstring + '\n'            
 
