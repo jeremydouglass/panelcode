@@ -297,7 +297,15 @@ def text_to_file (filename, content_string):
     with open(filename, "w") as text_file:
         text_file.write(content_string)
 
-def app_batch_svg (batchstring):
+def app_batch_svg (*args):
+    if len(args) == 1:
+        batchstring = args[0]
+    elif len(args) == 2:
+        batchstring = args[0]
+        thumbfilelist = args[1]
+    else:
+        raise TypeError('Bad parameters')
+
     """write a series of SVG files based on a string of many panelcodes"""
     svg_file_list = []
     batchstring = pstr_decomposite_pages(batchstring)
@@ -312,14 +320,46 @@ def app_batch_svg (batchstring):
             text_to_file('../script/output/'+pstr+'.svg', pstr_to_svg(pstr))
             svg_file_list.append(str(pstr)+'.svg')
 
-    app_svg_preview_page(svg_file_list,'../script/output/','index.html')
+    if len(args) == 1:
+        app_svg_preview_page(svg_file_list,'../script/output/','index.html')
+    elif len(args) == 2:
+        app_svg_preview_page(svg_file_list,'../script/output/','index.html', thumbfilelist)
     # return '...'
 
 def app_batch_html ():
     """..."""
     # return '...'
 
-def app_svg_preview_page (filelist,outpath,outfilename):
+def app_svg_preview_page (*args):
+    """..."""
+    if len(args) == 3:
+        filelist = args[0]
+        outpath = args[1]
+        outfilename = args[2]
+    elif len(args) == 4:
+        filelist = args[0]
+        outpath = args[1]
+        outfilename = args[2]
+        thumbfilelist = args[3]
+    else:
+        raise TypeError('Bad parameters')
+    # app_svg_preview_page(svg_file_list,'script/output/','index.html')    
+    preview_html1 = """<html>\n  <body>\n    <h1>Panelcode SVG output preview</h1>\n"""
+    preview_html2 = """  </body>\n</html>"""
+    with open('../script/output/index.html', "w") as index_file:
+        index_file.write(preview_html1)
+        if len(args) == 3:
+            for pgfile in filelist:
+                index_file.write('    <img src="' + pgfile + '"/>\n')
+                index_file.write(preview_html2)
+        elif len(args) == 4:
+            pairs = zip(filelist, thumbfilelist)
+            for pgfiles in pairs:
+                index_file.write('    <img src="' + pgfiles[0] + '"/>\n')
+                index_file.write('    <img src="../input/' + pgfiles[1] + '" style="max-width:75" /><br>\n')
+                index_file.write(preview_html2)
+                
+def app_svg_preview_page_origs (filelist,origfilelist,outpath,outfilename):
     """..."""
     # app_svg_preview_page(svg_file_list,'script/output/','index.html')    
     preview_html1 = """<html>\n  <body>\n    <h1>Panelcode SVG output preview</h1>\n"""
