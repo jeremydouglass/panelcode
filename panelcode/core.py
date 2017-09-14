@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 from os import linesep
 
 def load_file (pc_filename):
@@ -314,8 +315,12 @@ def text_to_file (filename, content_string):
     with open(filename, "w") as text_file:
         text_file.write(content_string)
 
-def app_batch_svg (*args):
+def app_batch_svg (*args, **kwargs):
     verbose = 0;
+    if ('outpath' in kwargs): # http://stackoverflow.com/questions/14017996/python-optional-parameter
+        outpath = kwargs['outpath']
+    else:
+        outpath = './'
     if len(args) == 1:
         batchstring = args[0]
     elif len(args) == 2:
@@ -337,13 +342,13 @@ def app_batch_svg (*args):
     for pstr in pstrings:
         pstr=pstr_clean(pstr)
         if len(pstr)>0:
-            text_to_file('../script/output/'+pstr+'.svg', pstr_to_svg(pstr))
+            text_to_file(outpath+'/'+pstr+'.svg', pstr_to_svg(pstr))
             svg_file_list.append(str(pstr)+'.svg')
 
     if len(args) == 1:
-        app_svg_preview_page(svg_file_list,'../script/output/','index.html')
+        app_svg_preview_page(svg_file_list,outpath,'index.html')
     elif len(args) == 2:
-        app_svg_preview_page(svg_file_list,'../script/output/','index.html', thumbfilelist)
+        app_svg_preview_page(svg_file_list,outpath,'index.html', thumbfilelist)
     # return '...'
 
 def app_batch_html ():
@@ -366,7 +371,7 @@ def app_svg_preview_page (*args):
     # app_svg_preview_page(svg_file_list,'script/output/','index.html')    
     preview_html1 = """<html>\n  <body>\n    <h1>Panelcode SVG output preview</h1>\n"""
     preview_html2 = """  </body>\n</html>"""
-    with open('../script/output/index.html', "w") as index_file:
+    with open(os.path.join(outpath,'index.html'), "w") as index_file:
         index_file.write(preview_html1)
         if len(args) == 3:
             for pgfile in filelist:
@@ -384,7 +389,7 @@ def app_svg_preview_page_origs (filelist,origfilelist,outpath,outfilename):
     # app_svg_preview_page(svg_file_list,'script/output/','index.html')    
     preview_html1 = """<html>\n  <body>\n    <h1>Panelcode SVG output preview</h1>\n"""
     preview_html2 = """  </body>\n</html>"""
-    with open('../script/output/index.html', "w") as index_file:
+    with open(os.path.join(outpath,'index.html'), "w") as index_file:
         index_file.write(preview_html1)
         for pgfile in filelist:
             index_file.write('    <img src="' + pgfile + '"/>\n')
