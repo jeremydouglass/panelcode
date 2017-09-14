@@ -129,6 +129,7 @@ def pstr_rowcount (pstr):
 ### RENDERERS
 
 def pstr_to_html (pstr):
+    verbose = 0
     """render a panelcode string as HTML"""
     pghtmlstring = ''
     tgroup_start = '('
@@ -138,11 +139,16 @@ def pstr_to_html (pstr):
     tables = [x.strip() for x in pstr.split('_')] # http://stackoverflow.com/questions/4071396/split-by-comma-and-strip-whitespace-in-python
     rowheight_slug = """{rowheight}""" # slug for replacing last, since we count rows as we go.
     for table in tables:
-        print '     table: ' + str(table)
+        if verbose:
+            print '     table: ' + str(table)
         tstring = ''
         tstring = '<table class=\'row\'>\n'
-        colcount = 0 ; print '          colcount = 0'
-        colrowmax = 0; print '          colrowmax = 0'
+        colcount = 0
+        if verbose:
+            print '          colcount = 0'
+        colrowmax = 0
+        if verbose:
+            print '          colrowmax = 0'
         colcount_slug = """{colcount}"""
         tstring += '  <tr class="colspacer">' + colcount_slug + '</tr>\n' # placeholder until columns are counted
         if "(" not in table: # http://stackoverflow.com/questions/5473014/test-a-string-for-a-substring
@@ -160,23 +166,28 @@ def pstr_to_html (pstr):
             tstring += '  </tr>\n'
         elif "(" in table: # http://stackoverflow.com/questions/3437059/does-python-have-a-string-contains-substring-method
             tbgroup = ((table.split(tgroup_start))[1].split(tgroup_end)[0]) #http://stackoverflow.com/questions/3368969/find-string-between-two-substrings
-            print '       tbgroup: ' + tbgroup
+            if verbose:
+                print '       tbgroup: ' + tbgroup
             tbgroup_rows = [x.strip() for x in tbgroup.split(',')]
-            print tbgroup_rows
+            if verbose:
+                print tbgroup_rows
             colrowmax = 0
             for row in tbgroup_rows:
-                print '         row: ' + row
+                if verbose:
+                    print '         row: ' + row
                 tstring += '  <tr height=\''+str(rowheight_slug)+'\'>\n'
                 # tstring += '  <tr>\n'
                 rowgroup_cells = [x.strip() for x in row.split('+')]
                 for cellgroup in rowgroup_cells:
-                    print '         cellgroup: ' + cellgroup
+                    if verbose:
+                        print '         cellgroup: ' + cellgroup
                     cellgroup = cellgroup.replace("r", ".r")
                     cellgroup = cellgroup.replace("c", ".c")
                     if cellgroup.startswith('.'): # http://stackoverflow.com/questions/19954593/python-checking-a-strings-first-and-last-character
                         cellgroup = '1' + cellgroup
                     cellgroup_attribs = [x.strip() for x in cellgroup.split('.')]
-                    print '           cells: ' + cellgroup_attribs[0]
+                    if verbose:
+                        print '           cells: ' + cellgroup_attribs[0]
                     tstring += '    '
                     for cellcount in range(0,int(cellgroup_attribs[0])):
                         # tstring += '<td height=\''+str(rowheight_slug)+'\''
@@ -186,17 +197,23 @@ def pstr_to_html (pstr):
                             for attrib in cellgroup_attribs[1:]: # skip the count, just check attrib(s)                                
                                 if attrib.startswith('r'):
                                     tstring += ' rowspan=\'' + attrib[1:] + '\'' # value minus 'r' prefix
-                                    print '           ---r attrib:' + attrib[1:]
+                                    if verbose:
+                                        print '           ---r attrib:' + attrib[1:]
                                 elif attrib.startswith('c'):
-                                    print '           ---c attrib:' + attrib[1:]
+                                    if verbose:
+                                        print '           ---c attrib:' + attrib[1:]
                                     tstring += ' colspan=\'' + attrib[1:] + '\'' # value minus 'c' prefix
-                                    cellcols = int(attrib[1:]) ;  print '            colcells: ' + str(attrib[1:])
+                                    cellcols = int(attrib[1:])
+                                    if verbose:
+                                        print '            colcells: ' + str(attrib[1:])
                                 else:
                                     print 'ERROR: Bad attribute (no r/c prefix): ' + attrib
                         except IndexError:
                             pass
                         tstring += '></td>'
-                        colcount = colcount + cellcols ; print '          colcount = ' + str(colcount)
+                        colcount = colcount + cellcols
+                        if verbose:
+                            print '          colcount = ' + str(colcount)
                     tstring += '\n'
                     if colrowmax < colcount:
                         colrowmax = colcount
@@ -298,6 +315,7 @@ def text_to_file (filename, content_string):
         text_file.write(content_string)
 
 def app_batch_svg (*args):
+    verbose = 0;
     if len(args) == 1:
         batchstring = args[0]
     elif len(args) == 2:
@@ -309,11 +327,13 @@ def app_batch_svg (*args):
     """write a series of SVG files based on a string of many panelcodes"""
     svg_file_list = []
     batchstring = pstr_decomposite_pages(batchstring)
-    print 'batchstring: '
-    print batchstring
+    if verbose:
+        print 'batchstring: '
+        print batchstring
     pstrings = [x.strip() for x in batchstring.splitlines()]
-    print 'pstrings: '
-    print pstrings
+    if verbose:
+        print 'pstrings: '
+        print pstrings
     for pstr in pstrings:
         pstr=pstr_clean(pstr)
         if len(pstr)>0:
