@@ -102,7 +102,7 @@ It also might be of interest as a stock layout generator for storyboarding or te
 
 #### Design goals
 
-Panelcode aims to make large collections of disparate layout-based work (graphic design, comics, etc.) to be concisely described in terms of layout in a way that is searchable and comparable using a shared structural vocabulary. It emphasizes abstract layouts that are quickly specified by hand and can then be rendered in many forms (html, svg, xml, etc.).
+Panelcode concisely describes the layouts of large collections layout-based works (newspapers, websites, graphic designs, comics, etc.) in a way that enables visual summary,  searchable and comparable using a shared structural vocabulary. It emphasizes abstract layout codes that are quickly specified by hand and can then be rendered as glyphs in many visual forms (html, svg, xml, etc.). Design goals include:
 
 1. **human-readable** (and writeable) simple layout representations.
 2. **concise** for rapid accurate data entry, including many shorthand forms.
@@ -163,7 +163,7 @@ Panelcode is _also_ not related to these other things with the same or similar n
 -  [card security codes](https://en.wikipedia.org/wiki/Card_security_code), a.k.a. 'panel codes' 
 
 
-## What Panelcodecannot encode
+## What Panelcode cannot encode
 
 Panelcode can encode a lot -- but these encodings are always abstractions and approximations, and there are many layouts that it can only partially represent. It is optimized for a subset of primarily horizontal, row-based grid layouts, or for expressing a grid-based approximation of a layouts that are "close enough."
 
@@ -220,7 +220,7 @@ Panelcode cannot encode non-rectangular panel units:
  easily encode:
 
 
-#### what counts as a panel?
+#### What counts as a panel?
 
 Panelcode is agnostic about what a panel is. For this reason there are many apparently simple and straightforward layouts which could be coded in different ways. In comics, for example, Panelcode has no special support for captions -- a box of text that presents narration.
 
