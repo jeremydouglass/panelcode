@@ -1,41 +1,41 @@
 # Panelcode -- tools for panel-based layouts
 
-[0]:             ../../script/output/0.svg
-[1_2_3_4_5_6]:   ../../script/output/1_2_3_4_5_6.svg
-[1_3_2_4]:       ../../script/output/1_3_2_4.svg
-[2]:             ../../script/output/2.svg
-[2_2]:           ../../script/output/2_2.svg
-[2_2_2_1_1_2_1]: ../../script/output/2_2_2_1_1_2_1.svg
-[2_2++3_3]:      ../../script/output/2_2++3_3.svg
-[2_3]:           ../../script/output/2_3.svg
-[2_3_2]:         ../../script/output/2_3_2.svg
-[2_3_2++]:       ../../script/output/2_3_2.svg
-[2_3_3(1+r2,1)]: ../../script/output/2_3_3(1+r2,1).svg
-[2_3_5]:         ../../script/output/2_3_5.svg
-[2_2_5(r2+2,2)]: ../../script/output/2_2_5(r2+2,2).svg
-[3(r2+1,1)]:     ../../script/output/3(r2+1,1).svg
-[3(1+r2,1)]:     ../../script/output/3(1+r2,1).svg
-[3]:             ../../script/output/3.svg
-[3_3]:           ../../script/output/3_3.svg
-[3_3_3]:         ../../script/output/3_3_3.svg
-[3_3_3_3_3]:     ../../script/output/3_3_3_3_3.svg
+[0]:             ../../panelcode-data/script2/output/0.svg
+[1_2_3_4_5_6]:   ../../panelcode-data/script2/output/1_2_3_4_5_6.svg
+[1_3_2_4]:       ../../panelcode-data/script2/output/1_3_2_4.svg
+[2]:             ../../panelcode-data/script2/output/2.svg
+[2_2]:           ../../panelcode-data/script2/output/2_2.svg
+[2_2_2_1_1_2_1]: ../../panelcode-data/script2/output/2_2_2_1_1_2_1.svg
+[2_2++3_3]:      ../../panelcode-data/script2/output/2_2++3_3.svg
+[2_3]:           ../../panelcode-data/script2/output/2_3.svg
+[2_3_2]:         ../../panelcode-data/script2/output/2_3_2.svg
+[2_3_2++]:       ../../panelcode-data/script2/output/2_3_2.svg
+[2_3_3(1+r2,1)]: ../../panelcode-data/script2/output/2_3_3(1+r2,1).svg
+[2_3_5]:         ../../panelcode-data/script2/output/2_3_5.svg
+[2_2_5(r2+2,2)]: ../../panelcode-data/script2/output/2_2_5(r2+2,2).svg
+[3(r2+1,1)]:     ../../panelcode-data/script2/output/3(r2+1,1).svg
+[3(1+r2,1)]:     ../../panelcode-data/script2/output/3(1+r2,1).svg
+[3]:             ../../panelcode-data/script2/output/3.svg
+[3_3]:           ../../panelcode-data/script2/output/3_3.svg
+[3_3_3]:         ../../panelcode-data/script2/output/3_3_3.svg
+[3_3_3_3_3]:     ../../panelcode-data/script2/output/3_3_3_3_3.svg
 
-[4(r3+1,1,1)]:   ../../script/output/4(r3+1,1,1).svg
-[4(1+r3,1,1)]:   ../../script/output/4(1+r3,1,1).svg
-[5(1+r2+1,2)]:   ../../script/output/5(1+r2+1,2).svg
-[5(r2+1+r2,1)]:  ../../script/output/5(r2+1+r2,1).svg
-[5(r2+2,2)]:     ../../script/output/5(r2+2,2).svg
-[5(2+r2,2)]:     ../../script/output/5(2+r2,2).svg
+[4(r3+1,1,1)]:   ../../panelcode-data/script2/output/4(r3+1,1,1).svg
+[4(1+r3,1,1)]:   ../../panelcode-data/script2/output/4(1+r3,1,1).svg
+[5(1+r2+1,2)]:   ../../panelcode-data/script2/output/5(1+r2+1,2).svg
+[5(r2+1+r2,1)]:  ../../panelcode-data/script2/output/5(r2+1+r2,1).svg
+[5(r2+2,2)]:     ../../panelcode-data/script2/output/5(r2+2,2).svg
+[5(2+r2,2)]:     ../../panelcode-data/script2/output/5(2+r2,2).svg
 
-[0_(2+0+2)_0]:   ../../script/output/0_(2+0+2)_0.svg
-[0_1_(1+0)]:     ../../script/output/0_1_(1+0).svg
+[0_(2+0+2)_0]:   ../../panelcode-data/script2/output/0_(2+0+2)_0.svg
+[0_1_(1+0)]:     ../../panelcode-data/script2/output/0_1_(1+0).svg
 
-[0_2_0]:         ../../script/output/0_2_0.svg
-[0_3_0]:         ../../script/output/0_3_0.svg
-[3(r2+0,1)]:     ../../script/output/3(r2+0,1).svg
+[0_2_0]:         ../../panelcode-data/script2/output/0_2_0.svg
+[0_3_0]:         ../../panelcode-data/script2/output/0_3_0.svg
+[3(r2+0,1)]:     ../../panelcode-data/script2/output/3(r2+0,1).svg
 
-[2_(1,0)]:       ../../script/output/2_(1,0).svg
-[2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)]: ../../script/output/2_5(1+r2+r2+r2,1)_4(r2+r2+1,1).svg
+[2_(1,0)]:       ../../panelcode-data/script2/output/2_(1,0).svg
+[2_5(1+r2+r2+r2,1)_4(r2+r2+1,1)]: ../../panelcode-data/script2/output/2_5(1+r2+r2+r2,1)_4(r2+r2+1,1).svg
 
 
 ## Introducing Panelcode
