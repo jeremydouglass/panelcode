@@ -1,0 +1,32 @@
+## WATCHMEN -- Graphic novel edition
+##   Panelcode
+##   Encoded by Maite Urcaregui 2017-08
+##   Edited by Jeremy Douglass
+
+# CHAPTER 1
+3_3_1
+2(c2+1)_3_3
+3_3_1
+3_2(1+c2)_3
+3_3_3
+(r2c4,0,4)  # Or 4_1 # Not (r2,4)
+3_3_3
+2(c2+1)_3_3
+3_2(c2+1)_3
+3_3_3
+3_3_2(1+c2)
+2(1+c2)_3_2(c2+1)
+5(4, r2c4, 0)  # Or 4_1 # Not 5(4, r2)
+1_3_2(1+c2)
+3_3_3
+3_3_3
+2(1+c2)_3_3
+4(3,r2c3,0) # 4(3, r2)
+3_3_3
+4(c2r3+1, 1, 1)
+3_3_3
+3_3_3
+3_3_3
+1_3_3 # missing
+3_2(c2+1)_3
+3_3_2(c5+1)
