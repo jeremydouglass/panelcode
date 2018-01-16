@@ -381,7 +381,7 @@ def app_svg_preview_page (*args):
             pairs = zip(filelist, thumbfilelist)
             for pgfiles in pairs:
                 index_file.write('    <img src="' + pgfiles[0] + '"/>\n')
-                index_file.write('    <img src="../input/' + pgfiles[1] + '" style="max-width:75" /><br>\n')
+                index_file.write('    <a href="' + pgfiles[1] + '"><img src="' + pgfiles[1] + '" style="max-width:75" /></a><br>\n')
                 index_file.write(preview_html2)
                 
 def app_svg_preview_page_origs (filelist,origfilelist,outpath,outfilename):
