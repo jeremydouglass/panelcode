@@ -1,0 +1,20 @@
+# panelcode test strings
+## warning? error?
+
+_
+_3
+1(1)_2(2)_3(3)
+
+3(2r2+1)       # ERROR rowgroup incomplete. might be valid? implicit 0?
+3(2r2+1,0)     # corrected
+
+# panelcode test strings
+
+## accidental flipping of row (r2 -> 2r),
+## no row argument should be implicit 1, or error?
+
+# 2(r+1)       # ERROR r
+# 3(2r+1,1)    # ERROR 2r
+3(r2+1,1)      # corrected
+
+1(r2+1+r2,1)   # SHOULD WARN that headnode marker is incorrect

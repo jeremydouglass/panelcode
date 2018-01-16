@@ -1,0 +1,11 @@
+# panelcode test strings
+## conversions
+
+(3)_(3)_(3)     # groups --> row nums
+3_3_3
+4(1+r2+1,1+1)   # 'mixed' --> full
+4(1+r2+1,2)   
+4(1+r2+1,1+1)   # 'mixed' --> short
+4
+3C_4H_4I        # shorthand --> full
+3(r2+1,1)_4(r2+1+r2,1)_4(1+r2+1,2)
