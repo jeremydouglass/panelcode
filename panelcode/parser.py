@@ -17,52 +17,9 @@ import pyparsing as pp
 def parse_panelcode (pstr):
     """..."""
 
-    #  BNF
-    #  %start panelcode
-    #  
-    #  <panelcodeblock>    ...a text string / file, with one or more separated by linebreaks:
-    #                       <panelcode> | <panelcode> <comment> | <comment> | <blankline>
-    #
-    #+ <panelcode>         :=  <page> | <pagegroup>
-    #  
-    #+ <pagegroup>         :=  <page> <pagejoin> <page> | <page> <pagejoin> <pagegroup>
-    #+   <pagejoin>        :=  <horizontaljoin> | <verticaljoin>
-    #+   <horizontaljoin>  :=  "++";
-    #+   <verticaljoin>    :=  ",,";
-    #  
-    #+ <page>              :=  <row> | <row> <rowseparator> <row> | <emptypage> | <uncodedpage>
-    #+   <rowseparator>    :=  "_" | ",";
-    #+   <emptypage>       :=  <emptyrow>
-    #+   <uncodedpage>     :=  <uncodedrow>
-    #  
-    #+ <grouprow>          :=  <groupopen> <grouprowcontents> <groupclose>
-    #                        | <decorativenum> <groupopen> <grouprowcontents> <groupclose>
-    #    <decorativenum>   :=  <numbers>
-    #+   <groupopen>       :=  "("
-    #+   <groupclose>      :=  ")"
-    #  
-    #+ <grouprowcontents>  :=  <groupunit> | <groupunit> <groupseparator> <groupunit>
-    #+   <groupseparator>  :=  <newcol> | <newrow>
-    #+     <newcol>        :=  "+"
-    #+     <newrow>        :=  ","
-    #+   <groupunit>       :=  <emptyrow> | <numrow> | <numrow> <spanmodifier> | <spanmodifier>
-    #+     <spanmodifier>  :=  <rowspan> | <colspan> | <rowspan> <colspan> | <colspan> <rowspan>
-    #        <rowspan>     :=  "r" <numbers>
-    #        <colspan>     :=  "c" <numbers>
-    #  
-    #+ <row>               :=  <grouprow> | <numrow> | <emptyrow> | <uncodedrow>
-    #+   <emptyrow>        :=  "0"
-    #+   <uncodedrow>      :=  <groupopen> "_" <groupclose>
-    #  
-    #+ <numrow>            :=  <countingnums> | <blankpanel>
-    #+ <blankpanel>        :=  0
-    #  
-    #  <digits>            :=  <digit> | <digit> <digits>
-    #  <digit>             :=  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-    #  <numbers>           :=  <countingnums> | <countingnums> <digits>
-    #+ <countingnums>      :=  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-
-    countingnums    = pp.Regex(r"[1-9]") # or support 10+... pp.Regex(r"[1-9][0-9]*")
+    countingnums    = pp.Regex(r"[1-9]").setResultsName('simplerow', listAllMatches=True)
+    numpage         = pp.Group( pp.OneOrMore( countingnums ) ).setResultsName('numpage')
+    
     rowseparator    = pp.Suppress(pp.Literal("_"))
     groupopen       = pp.Suppress(pp.Literal("("))
     groupclose      = pp.Suppress(pp.Literal(")"))
@@ -90,7 +47,7 @@ def parse_panelcode (pstr):
     panelcode       = pp.Group( pp.OneOrMore( pagegroup ) ).setResultsName('panelcode', listAllMatches=True)
     
     try:
-        result = numrow.parseString(pstr)
+        result = panelcode.parseString(pstr)
         # print pstr + " Matches: {0}".format(result)
         return result
     except pp.ParseException as x:
