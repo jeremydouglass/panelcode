@@ -31,12 +31,12 @@ def parse_panelcode (pstr):
     #+   <verticaljoin>    :=  ",,";
     #  
     #+ <page>              :=  <row> | <row> <rowseparator> <row> | <emptypage> | <uncodedpage>
-    #+   <rowseparator>    :=  "_";
+    #+   <rowseparator>    :=  "_" | ",";
     #+   <emptypage>       :=  <emptyrow>
     #+   <uncodedpage>     :=  <uncodedrow>
     #  
     #+ <grouprow>          :=  <groupopen> <grouprowcontents> <groupclose>
-    #  	                    | <decorativenum> <groupopen> <grouprowcontents> <groupclose>
+    #                        | <decorativenum> <groupopen> <grouprowcontents> <groupclose>
     #    <decorativenum>   :=  <numbers>
     #+   <groupopen>       :=  "("
     #+   <groupclose>      :=  ")"
@@ -54,7 +54,8 @@ def parse_panelcode (pstr):
     #+   <emptyrow>        :=  "0"
     #+   <uncodedrow>      :=  <groupopen> "_" <groupclose>
     #  
-    #+ <numrow>            :=  <countingnums>
+    #+ <numrow>            :=  <countingnums> | <blankpanel>
+    #+ <blankpanel>        :=  0
     #  
     #  <digits>            :=  <digit> | <digit> <digits>
     #  <digit>             :=  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
@@ -71,27 +72,25 @@ def parse_panelcode (pstr):
     verticaljoin    = pp.Literal("++")
     horizontaljoin  = pp.Literal(",,")
 
-    numrow          = countingnums # pp.Literal("3") # placeholder
-    emptyrow        = pp.Literal("0").setResultsName('emptyrow') # or...?  pp.Literal("E")
-    uncodedrow      = pp.Group( groupopen + pp.Literal("~").setResultsName('uncoded') + groupclose )
-    spanmodifier    = pp.Regex(r"[rc][1-9][0-9]*").setResultsName('spanmodifier')
+    blankpanel      = pp.Literal("0")
+    numrow          = ( countingnums | blankpanel ).setResultsName('panel', listAllMatches=True) # pp.Literal("3") # placeholder
+    emptyrow        = pp.Literal("0").setResultsName('emptyrow', listAllMatches=True) # or...?  pp.Literal("E")
+    uncodedrow      = pp.Group( groupopen + pp.Literal("~").setResultsName('uncoded', listAllMatches=True) + groupclose )
+    spanmodifier    = pp.Regex(r"[rc][1-9][0-9]*").setResultsName('spanmodifier', listAllMatches=True)
 
-    groupunit       = pp.Group( emptyrow | numrow | numrow + spanmodifier | spanmodifier ).setResultsName('unit')
-    groupseparator  = ( newcol | newrow )
+    groupunit       = pp.Group( emptyrow | numrow | numrow + spanmodifier | spanmodifier ).setResultsName('groupunit', listAllMatches=True)
+    groupseparator  = ( newcol | newrow ).setResultsName('groupseparator')
     grouprowcontents = pp.Group( groupunit + pp.ZeroOrMore( groupseparator + groupunit ) )
     grouprow        = pp.Group( groupopen + grouprowcontents + groupclose )# pp.Literal("3()") # placeholder
 
-    row             = grouprow | numrow | emptyrow | uncodedrow
-    emptypage       = emptyrow
-    uncodedpage     = uncodedrow
-    page            = pp.Group( emptypage | uncodedpage | pp.Group(row + pp.ZeroOrMore( pp.Optional(rowseparator) + row )).setResultsName('rows') ).setResultsName('page')
-    pagejoin        = ( horizontaljoin | verticaljoin ).setResultsName('pagejoin')
-    pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ) + pp.Optional(pageseparator)).setResultsName('pagegroup')
-    panelcode       = pp.Group( pp.OneOrMore( pagegroup | page ) ).setResultsName('panelcode')
+    row             = ( grouprow | numrow ).setResultsName('rows', listAllMatches=True)
+    page            = pp.Group( pp.Group(row + pp.ZeroOrMore( pp.Optional(rowseparator) + row )) ).setResultsName('page', listAllMatches=True)
+    pagejoin        = ( horizontaljoin | verticaljoin ).setResultsName('pagejoin', listAllMatches=True)
+    pagegroup       = pp.Group( page + pp.ZeroOrMore( pagejoin + page ) + pageseparator).setResultsName('pagegroup', listAllMatches=True)
+    panelcode       = pp.Group( pp.OneOrMore( pagegroup ) ).setResultsName('panelcode', listAllMatches=True)
     
     try:
-        result = panelcode.parseString(pstr)
-        # result = panelcode.parseString(pstr)
+        result = numrow.parseString(pstr)
         # print pstr + " Matches: {0}".format(result)
         return result
     except pp.ParseException as x:
