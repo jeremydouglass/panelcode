@@ -1,4 +1,4 @@
 graphviz==0.8
 panelcode==0.0.1
-py==1.4.34
+py==1.10.0
 pyparsing==2.2.0
